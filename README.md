@@ -6,7 +6,7 @@ Nodejs extremly fast, simple, and secure net &amp; web framework
 
 ```
 $ npm install fortressjs
-$ cp "require('app.js')" > app.js
+$ echo "require('fortressjs')" > app.js
 $ node app.js
 ```
 
