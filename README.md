@@ -1,8 +1,19 @@
 # FortressJS
 Nodejs extremly fast, simple, and secure net &amp; web framework
 
-3 steps installation
-----------
+3 steps installation with git
+-----------------------------
+
+```
+$ git clone https://github.com/seraum/fortressjs/
+$ cd fortressjs
+$ node wf.js
+```
+
+or
+
+3 steps installation with npm
+-----------------------------
 
 ```
 $ npm install fortressjs
