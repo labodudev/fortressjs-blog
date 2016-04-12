@@ -10,6 +10,8 @@ $ echo "require('fortressjs')" > app.js
 $ node app.js
 ```
 
+You can now browse http://127.0.0.1/ or http://localhost/
+
 See more
 --------
 
