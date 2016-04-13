@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.Srv = new Srv();
 module.exports.SrvOpen = Srv.Open;
 module.exports.LoadServer = LoadServer;
@@ -34,7 +40,7 @@ function Srv()
 	  securify();
   }
 
-// TODO : PUT THIS IN ENGINES
+// TODO : METTRE CETTE FUNCTION DANS LES ENGINE
 
 var securify = function()
 {

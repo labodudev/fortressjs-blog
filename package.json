@@ -1,6 +1,6 @@
 {
   "name": "fortressjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Nodejs extremly fast, simple, and secure net & web framework",
   "main": "wf.js",
   "scripts": {

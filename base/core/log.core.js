@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.Log = Log;
 module.exports.wLog = wLog;
 module.exports.Error = Error;

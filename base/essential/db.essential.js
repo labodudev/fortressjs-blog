@@ -1,10 +1,16 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.LoadDB = LoadDB;
 UTILS.LoadDB = LoadDB;
 var wf = WF();
 try{
     GLOBAL.mongodb = require("mongodb");
 }
-catch(e){console.log("Install mongodb plugin if you want MongoDB support  'npm install mongodb'");}
+catch(e){console.log("Please install mongodb mondule with : npm install mongodb");}
 function Database(connectObj, cb)
 {
     //proto, host, port, name
@@ -34,8 +40,7 @@ function Database(connectObj, cb)
             var mdb = new MDB(db);
             if(icb !== undefined && typeof icb == 'function')
                 icb(mdb);
-			// DB LOADED EVENT
-          wf.event.emit("dbLoaded");
+          //wf.event.emit("dbLoaded");
         }
         else
         {
@@ -54,7 +59,7 @@ var MDB = function(link)
 		this.link.collection(coll).insert(data, option, cb);
   }
 
-  // QUERY = FIND QUERY && DATA = MONGODB UPDATE OPTION && OPTION = DB OPTION
+  // RAPPEL : QUERY = FIND QUERY && DATA = MONGODB UPDATE OPTION && OPTION = DB OPTION
   // $inc $set ...
    this.Update = function(coll, query, data, option, cb)
   {

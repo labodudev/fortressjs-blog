@@ -1,10 +1,11 @@
-module.exports.dataEngine = new dataEngine();
-var wf = WF();
 /*
 
-    ??? ADD A POST SIZE LIMIT HERE WITH WF().CONF["POST_LIMIT"] = XXX IN SETTINGS ???
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
 
 */
+module.exports.dataEngine = new dataEngine();
+var wf = WF();
 
 function dataEngine()
 {

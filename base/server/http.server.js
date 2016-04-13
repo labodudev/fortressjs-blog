@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 var wf = WF();
 wf.AppServer.http = HttpServer;
 

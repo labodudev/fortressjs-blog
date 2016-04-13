@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.Launch = Launch;
 module.exports.LoadApps = LoadApps;
 module.exports.LoadHooks = LoadHooks;
@@ -40,7 +46,7 @@ function App(_path, _name)
 			var darrL = dArr.length;
             for(var d = 0; d < darrL; d++)
             {
-                if(wfStringEndsWith(dArr[d], wf.CONF['VIEW_END']))
+                if(dArr[d].endsWith(wf.CONF['VIEW_END']))
                 {
                   var ind = dArr[d].replace(wf.CONF['VIEW_END'], "");
                   this.view[ind] = fs.readFileSync(v + dArr[d]);
@@ -123,7 +129,7 @@ function App(_path, _name)
 function Launch(req, res)
 {
       var app = req.app[req.loop];
-      // IF HOOKED NOT THE SAME RIGHTS
+      // IF HOOK NOT THE SAME RIGHTS
       var env = {};
       if(!app.hooked)
       {
@@ -330,6 +336,11 @@ function LoadHooks()
             // LOAD IN ARRAY
             if(hArr[app.conf.config.hook] === undefined) hArr[app.conf.config.hook] = [];
             hArr[app.conf.config.hook].push({'name': app.name, 'hooked': true, 'conf': app.conf, 'exec': eTmp, 'view': app.view });
+
+
+
+
+
             }
 				  }
 				});

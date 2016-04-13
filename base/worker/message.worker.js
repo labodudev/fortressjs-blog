@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.Message = new WorkerMessage();
 UTILS.Message = new WorkerMessage();
 var wf = WF();

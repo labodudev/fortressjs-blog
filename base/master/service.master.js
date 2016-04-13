@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.Service = new MasterService();
 var wf = WF();
 
@@ -14,6 +20,11 @@ function MasterService()
 
 	this.checkArgs = function()
 	{
+        /*if(wf.args._.length < 1 && wf.args.help === undefined)
+			return true;
+		else
+			wf.CLI.check();
+		return false;*/
         return true;
 	}
 

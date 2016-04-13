@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.hookMod = hookMod;
 module.exports.LoadMods = LoadMods;
 UTILS.hookMod = hookMod;
@@ -30,7 +36,7 @@ function Module(_path, _name)
 	      var dArrL = dArr.length;
         for(var d = 0; d < dArrL; d++)
         {
-          if(wfStringEndsWith(dArr[d], wf.CONF['VIEW_END']))
+          if(dArr[d].endsWith(WF().CONF['VIEW_END']))
           {
             var ind = dArr[d].replace(WF().CONF['VIEW_END'], "");
             this.view[ind] = fs.readFileSync(v + dArr[d]);
@@ -58,20 +64,34 @@ function ModConf(_path, _name)
 			if(fs.existsSync(file))
 			{
 				try
-				{
-				  var modConf = require (file);
-						  for(var prop in modConf)
-						  {
-							for(var index in modConf[prop])
-					{
-					  this.config[index] = modConf[prop][index];
-					}
-				  }
-				}
-				catch(e)
-				{
-				  console.log("[!] Error conf : " + file);
-				}
+        {
+          var modConf = require (file);
+				  for(var prop in modConf)
+				  {
+  					for(var index in modConf[prop])
+            {
+              this.config[index] = modConf[prop][index];
+            }
+          }
+        }
+        catch(e)
+        {
+          console.log("[!] Error conf : " + file);
+        }
+        /*
+        try
+        {
+          var tmp = JSON.parse(fs.readFileSync(file));
+          for(var index in tmp)
+          {
+            this.config[index] = tmp[index];
+          }
+        }
+        catch(e)
+        {
+          console.log("[!] Error conf : " + file);
+        }
+        */
 			}
 		}
 

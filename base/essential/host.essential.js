@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.LoadHosts = LoadHosts;
 module.exports.CreateHost = Host;
 module.exports.LoadAppArray = LoadAppArray;
@@ -82,7 +88,7 @@ function hookHostCss(name)
 	if (fs.existsSync(path) && fs.lstatSync(path).isDirectory())
 	{
 		var host = new Host(path, name);
-		if(host.conf.config.css && host.conf.config['css'].length > 0 && fs.existsSync(host.conf.config['css']) && host.hostState && host.conf.config['state'])
+		if(host.conf.config['css'].length > 0 && fs.existsSync(host.conf.config['css']) && host.hostState && host.conf.config['state'])
 		{
 			var hostCss = require(host.conf.config['css']);
 			for(var prop in hostCss)
@@ -159,7 +165,7 @@ function LoadAppArray()
 
 function loadNoMap(s, h)
 {
-    if(wf.SERVERS[s] !== undefined && wf.SERVERS[s].engineArray)
+    if(wf.SERVERS[s] !== undefined && wf.SERVERS[s].engineArray !== undefined)
     {
         var et  = wf.SERVERS[s].engineArray.length;
         for(var tt = 0; tt < et; tt++)

@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.LoadZones = LoadZones;
 module.exports.CreateZone = Zone;
 module.exports.checkCache = checkCache;
@@ -13,12 +19,10 @@ function checkCache (cache, path)
 	}
     else
     {
-		var j = 0;
-		if(cache && cache.length)
-			j = cache.length;
+        var j = cache.length;
         for(var i = 0; i < j; i++)
         {
-            if(wfStringEndsWith(path, cache[i]))
+            if( path.endsWith( cache[i] ) )
             {
                 return true;
             }
@@ -161,7 +165,7 @@ function hookZoneCss(h, z, name)
 	if (fs.existsSync(path) && fs.lstatSync(path).isDirectory())
 	{
 		var zone = new Zone(path, name);
-		if(zone.conf.config.css && zone.conf.config['css'].length > 0 && fs.existsSync(zone.conf.config['css']) && zone.zoneState && zone.conf.config['state'])
+		if(zone.conf.config['css'].length > 0 && fs.existsSync(zone.conf.config['css']) && zone.zoneState && zone.conf.config['state'])
 		{
 			var zoneCss = require(zone.conf.config['css']);
 			for(var prop in zoneCss)

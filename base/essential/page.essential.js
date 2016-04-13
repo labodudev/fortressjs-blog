@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.LoadPages = LoadPages;
 module.exports.CreatePage = CreatePage;
 module.exports.AddPage = addPage;
@@ -34,7 +40,7 @@ function Page(_path, _name)
                     var dArrL = dArr.length;
                     for(var d = 0; d < dArrL; d++)
                     {
-                          if(wfStringEndsWith(dArr[d], wf.CONF['VIEW_END']))
+                          if(dArr[d].endsWith(wf.CONF['VIEW_END']))
                           {
                             var ind = dArr[d].replace(wf.CONF['VIEW_END'], "");
                             this.view[ind] = fs.readFileSync(v + dArr[d], 'utf8');
@@ -198,6 +204,25 @@ function LoadPages()
               if(typeof cTmp == "function")  
               {
                   cTmp = new cTmp();
+                  
+                  //var eTmp = {};
+
+                  /*
+                  for( var c in cTmp)
+                  {
+                    let cc = c;
+                    var fn = new cTmp[c]();
+                    for(var f in cTmp[c])
+                    {
+                      let ff = f;
+                      if(typeof(cTmp[cc][ff]) == "function")
+                      {
+                        cTmp[cc][ff].getView = function(view){console.log("ok")};
+                        eTmp[ff] = cTmp[cc][ff];
+                      }
+                    }
+                  }
+                  */
                   wf.SERVERS[v].HOSTS[w].ZONES[x].PAGES[y] = {'path': pDir, 'name': pTmp.name, 'uri':pTmp.conf.config.uri, 'conf': pTmp.conf, 'exec': cTmp, 'view':pTmp.view };
               }
             }

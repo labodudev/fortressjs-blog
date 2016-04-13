@@ -1,5 +1,12 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 var wf = WF();
 module.exports.Cluster = new MasterCluster();
+
 
 function MasterCluster()
 {
@@ -7,7 +14,7 @@ function MasterCluster()
 
 	this.exitFunction = function(worker, code, signal)
 	{
-		wf.Log("[M] A worker died; reloading one with srvid : " + worker.srvId + " - " + worker.wrkId);
+		//wf.Log("[M] A worker died; reloading one with srvid : " + worker.srvId + " - " + worker.wrkId);
         if(wf.SERVERS[worker.srvId] && wf.SERVERS[worker.srvId].state)
         {
             wf.Cluster.createWorker( worker.srvId, worker.wrkId );
@@ -15,7 +22,7 @@ function MasterCluster()
 		delete wf.CLUSTERS[worker.id];
 	}
 	
-    // WHEN A WORKER CRASH, WE RELOAD IT
+    // ON CAPTE LA FERMETURE D'UN WORKER ET ON LE RELANCE
     cluster.on('exit', this.exitFunction);
 
 	this.createWorker = function(srvId, wrkId)

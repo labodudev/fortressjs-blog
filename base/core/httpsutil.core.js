@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.httpsUtil = new httpsUtil();
 UTILS.httpsUtil = new httpsUtil();
 

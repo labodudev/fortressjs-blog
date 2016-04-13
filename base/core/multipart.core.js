@@ -1,3 +1,9 @@
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
 module.exports.MultipartParser = MultipartParser;
 
 var NL = '\r\n'; // RFC2046 S4.1.1
