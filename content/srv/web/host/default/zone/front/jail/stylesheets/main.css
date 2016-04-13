@@ -921,7 +921,7 @@ color: rgb(255, 255, 255); font-size: 18px;  background-color: rgb(247, 148, 29)
 	/*  Footer 3  */
 	.pix_footer_logo { margin-bottom: 10px; }
 	.footer3 { padding: 40px 0; }
-	.footer3_menu { margin: 20px 0; }
+	.footer3_menu { margin: 0 0 20px 0; }
 	.footer3_menu li a { font-weight: bold;line-height: 16px;margin: 8px 0;color: #999;text-decoration: none; }
 	.footer3_title { font-size: 16px;font-weight: bold; }
 	.big_number { font-size: 30px;font-weight: bold; }
@@ -933,7 +933,7 @@ color: rgb(255, 255, 255); font-size: 18px;  background-color: rgb(247, 148, 29)
 
 	/*  Features 1  */
 	.features_1 { background: #f3f3f3;padding: 50px 0; }
-	.f_1_icon_box {margin: 20px 0;}
+	.f_1_icon_box {margin: 0 0 20px 0;}
 	.features_1 .c1_style2 { font-weight: bold;font-size: 18px;margin-bottom: 10px;display: inline-block;}
 	.features_1 .c2_style2 { font-size: 14px;color: #999;line-height: 26px; }
 	.small_title { font-size: 18px;margin-bottom: 10px;display: inline-block; }
