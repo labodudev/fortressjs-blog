@@ -25,7 +25,7 @@ or
 
 ```
 $ npm install fortressjs
-$ echo "require('fortressjs')" > app.js
+$ echo require('fortressjs') > app.js
 $ node app.js
 ```
 
