@@ -10,7 +10,7 @@ var wf = WF();
 try{
     GLOBAL.mongodb = require("mongodb");
 }
-catch(e){console.log("Please install mongodb mondule with : npm install mongodb");}
+catch(e){wf.Log("[*] Info : install mongodb module for MongoDB support with : npm install mongodb");}
 function Database(connectObj, cb)
 {
     //proto, host, port, name
