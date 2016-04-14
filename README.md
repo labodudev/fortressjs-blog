@@ -1,5 +1,5 @@
 # FortressJS
-Nodejs extremly fast, simple, and secure net &amp; web framework
+Nodejs extremly fast, simple, modular and secure net &amp; web framework
 
 * Run on Windows, Mac, Linux, Smartphone ...
 * Run with all major js engines : V8, SM, Chakra
