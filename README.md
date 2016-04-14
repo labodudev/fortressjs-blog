@@ -2,6 +2,7 @@
 Nodejs extremly fast, simple, modular and secure net &amp; web framework
 
 More info about us : http://seraum.com
+
 Join us on Slack : https://fortressjs.slack.com
 
 
