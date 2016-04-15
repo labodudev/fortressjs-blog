@@ -4,7 +4,7 @@
   "description": "A Nodejs extremly fast, simple, and secure net and web framework",
   "main": "wf.js",
   "scripts": {
-    "test": "node script/unit.script.js"
+    "test": "node ./script/unit.script.js"
   },
   "repository": {
     "type": "git",
