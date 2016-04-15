@@ -1,6 +1,8 @@
 # FortressJS
 Nodejs extremly fast, simple, modular and secure net &amp; web framework
 
+[![Build Status](https://travis-ci.org/seraum/fortressjs.svg?branch=master)](https://travis-ci.org/seraum/fortressjs)
+
 More info about us : http://seraum.com
 
 Join us on Slack : https://fortressjs.slack.com
