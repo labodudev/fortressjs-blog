@@ -48,7 +48,6 @@ function RouteStatic()
 
             req.continue = false;
             f = req.HOST.ZONES[req.zone].path + req.zone + "/" + req.HOST.ZONES[req.zone].conf.shared + f;
-
             fs.stat(f, function(err, stat)
             {       
                 if(err)
@@ -57,11 +56,13 @@ function RouteStatic()
                 }
                 else if(stat.isFile())
                 {
-                    if( req.HOST.ZONES[req.zone].conf.cache !== undefined 
+					var cLength = 0;
+                    if( req.HOST.ZONES[req.zone].conf.cache
                        && UTILS.checkCache(req.HOST.ZONES[req.zone].conf.cache, f) )
                     {
                             var toAdd = {};
                             toAdd.buffer = fs.readFileSync(f);
+							cLength = buffer.byteLength;
                             toAdd.mime = wf.mimeUtil.lookup(f);
                             toAdd.path = f;
                             toAdd.mtime = stat.mtime;
@@ -69,10 +70,18 @@ function RouteStatic()
                                 req.HOST.ZONES[req.zone].shared = {};
                             req.HOST.ZONES[req.zone].shared[sUrl] = toAdd;
                     }
+					else if(req.HOST.ZONES[req.zone].shared && req.HOST.ZONES[req.zone].shared[sUrl])
+					{
+						cLength = req.HOST.ZONES[req.zone].shared[sUrl].buffer.byteLength;
+					}
+					else
+					{
+						cLength = fs.readFileSync(f).byteLength;
+					}
                     res.writeHead(200,
                     {
                         'Content-type': wf.mimeUtil.lookup(f),
-                        'Content-length': req.HOST.ZONES[req.zone].shared[sUrl].buffer.byteLength,
+                        'Content-length': cLength,
                         'Cache-Control': 'public, max-age=3600',
                         'Access-Control-Allow-Origin': req.url, // "*"
                         'X-Frame-Options': "SAMEORIGIN", // DENY, SAMEORIGIN, or ALLOW-FROM 
