@@ -30,8 +30,6 @@ function WorkerService()
       wf.LoadHosts(); // LOAD HOST FOR SRV
       wf.LoadZones(); // LOAD ZONES
       wf.LoadPages(); // LOAD PAGES IF ANY
-      wf.LoadMods(); // LOAD MODS IF ANY
-      wf.LoadTPL(); // LOAD TPL IF ANY
       wf.LoadEngines(); // LOAD ENGINES
       wf.LoadServerEngine(); // LOAD ENGINES FOR SRV
       wf.LoadApps(); // LOAD APPS FOR HOST
