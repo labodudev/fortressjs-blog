@@ -7,7 +7,7 @@
 'use strict'
 
 // DEFINE GLOBAL WF VAR
-GLOBAL.WF = require('./start/singleton.js');
+global.WF = require('./start/singleton.js');
 
 // CREATE GLOBAL WF CONF
 WF().CONF = {};

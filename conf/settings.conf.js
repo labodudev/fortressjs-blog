@@ -1,77 +1,78 @@
+	var wf = WF();
 /*** DEBUG CONF	***/
 
-	WF().CONF['DEBUG'] = true;
+	wf.CONF['DEBUG'] = true;
 
 /*** SERVER CONF ***/
-    WF().CONF['MAX_POST_SIZE'] = 5 * 1000 * 1000; //5MB
+    wf.CONF['MAX_POST_SIZE'] = 5 * 1000 * 1000; //5MB
 
   /*** APP SETTINGS ***/
 
-	WF().CONF['DEFAULT_TPL'] = "default";
+	wf.CONF['DEFAULT_TPL'] = "default";
 
-	WF().CONF['CONTENT_FOLDER'] = "content/";
-	WF().CONF['CONTENT_PATH'] = WF().CONF['MAIN_PATH'] + WF().CONF['CONTENT_FOLDER'];
+	wf.CONF['CONTENT_FOLDER'] = "content/";
+	wf.CONF['CONTENT_PATH'] = wf.CONF['MAIN_PATH'] + wf.CONF['CONTENT_FOLDER'];
 
-	WF().CONF['CORE_FOLDER'] = "core/";
+	wf.CONF['CORE_FOLDER'] = "core/";
 
-	WF().CONF['APP_FOLDER'] = 'app/';
-	WF().CONF['APP_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['APP_FOLDER'];
+	wf.CONF['APP_FOLDER'] = 'app/';
+	wf.CONF['APP_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['APP_FOLDER'];
 
-	WF().CONF['SCRIPT_FOLDER'] = 'script/';
-	WF().CONF['SCRIPT_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['SCRIPT_FOLDER'];
+	wf.CONF['SCRIPT_FOLDER'] = 'script/';
+	wf.CONF['SCRIPT_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['SCRIPT_FOLDER'];
 
-	WF().CONF['SRV_FOLDER'] = 'srv/';
-	WF().CONF['SRV_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['SRV_FOLDER'];
+	wf.CONF['SRV_FOLDER'] = 'srv/';
+	wf.CONF['SRV_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['SRV_FOLDER'];
 
-	WF().CONF['HOST_FOLDER'] = "host/";
+	wf.CONF['HOST_FOLDER'] = "host/";
 
-	WF().CONF['ENGINE_FOLDER'] = "engine/";
-	WF().CONF['ENGINE_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['ENGINE_FOLDER'];
+	wf.CONF['ENGINE_FOLDER'] = "engine/";
+	wf.CONF['ENGINE_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['ENGINE_FOLDER'];
 
-    WF().CONF['SQUEL_FOLDER'] = "squel/";
-	WF().CONF['SQUEL_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['SQUEL_FOLDER'];
+    wf.CONF['SQUEL_FOLDER'] = "squel/";
+	wf.CONF['SQUEL_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['SQUEL_FOLDER'];
 
-	WF().CONF['PROCESS_FOLDER'] = "process/";
-	WF().CONF['PROCESS_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['PROCESS_FOLDER'];
+	wf.CONF['PROCESS_FOLDER'] = "process/";
+	wf.CONF['PROCESS_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['PROCESS_FOLDER'];
 
-	WF().CONF['VAR_FOLDER'] = "var/";
-	WF().CONF['VAR_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['VAR_FOLDER'];
+	wf.CONF['VAR_FOLDER'] = "var/";
+	wf.CONF['VAR_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['VAR_FOLDER'];
 
-	WF().CONF['LOG_FOLDER'] = "log/";
-	WF().CONF['LOG_PATH'] = WF().CONF['VAR_PATH'] + WF().CONF['LOG_FOLDER'];
+	wf.CONF['LOG_FOLDER'] = "log/";
+	wf.CONF['LOG_PATH'] = wf.CONF['VAR_PATH'] + wf.CONF['LOG_FOLDER'];
 
-    WF().CONF['TMP_FOLDER'] = "tmp/";
-	WF().CONF['TMP_PATH'] = WF().CONF['CONTENT_PATH'] + WF().CONF['TMP_FOLDER'];
+    wf.CONF['TMP_FOLDER'] = "tmp/";
+	wf.CONF['TMP_PATH'] = wf.CONF['CONTENT_PATH'] + wf.CONF['TMP_FOLDER'];
 
-	WF().CONF['CONFIG_FOLDER'] = "config/";
-    WF().CONF['APPCONFIG_END'] = ".json";
+	wf.CONF['CONFIG_FOLDER'] = "config/";
+    wf.CONF['APPCONFIG_END'] = ".json";
 
-	WF().CONF['ZONE_FOLDER'] = "zone/";
-	WF().CONF['MOD_FOLDER'] = 'mod/';
-	WF().CONF['PAGE_FOLDER'] = 'page/';
-	WF().CONF['TPL_FOLDER'] = 'tpl/';
-	WF().CONF['PLUGIN_FOLDER'] = "plugin/";
-	WF().CONF['MODEL_FOLDER'] = "model/";
-    WF().CONF['JAIL_FOLDER'] = "jail/";
+	wf.CONF['ZONE_FOLDER'] = "zone/";
+	wf.CONF['MOD_FOLDER'] = 'mod/';
+	wf.CONF['PAGE_FOLDER'] = 'page/';
+	wf.CONF['TPL_FOLDER'] = 'tpl/';
+	wf.CONF['PLUGIN_FOLDER'] = "plugin/";
+	wf.CONF['MODEL_FOLDER'] = "model/";
+    wf.CONF['JAIL_FOLDER'] = "jail/";
 
 	/*** FILE END ***/
 
-	WF().CONF['APP_END'] = '.app.js';
-	WF().CONF['DEF_END'] = '.def.js';
-	WF().CONF['CONFIG_END'] = ".conf.js";
-	WF().CONF['PAGE_END'] = '.page.js';
-	WF().CONF['CODE_END'] = '.code.js';
-	WF().CONF['CSS_END'] = '.css.js';
-	WF().CONF['MOD_END'] = '.mod.js';
-	WF().CONF['TPL_END'] = '.tpl.js';
-	WF().CONF['VIEW_END'] = '.html';
-	WF().CONF['SCRIPT_END'] = '.script.js';
-	WF().CONF['MODEL_END'] = '.model.js';
-	WF().CONF['PROCESS_END'] = '.process.js';
-    WF().CONF["SQUEL_END"] = ".squel.js";
-	WF().CONF['OUT_END'] = '.out';
-	WF().CONF['LOG_END'] = '.log';
-    WF().CONF['ZIP_END'] = '.zip';
+	wf.CONF['APP_END'] = '.app.js';
+	wf.CONF['DEF_END'] = '.def.js';
+	wf.CONF['CONFIG_END'] = ".conf.js";
+	wf.CONF['PAGE_END'] = '.page.js';
+	wf.CONF['CODE_END'] = '.code.js';
+	wf.CONF['CSS_END'] = '.css.js';
+	wf.CONF['MOD_END'] = '.mod.js';
+	wf.CONF['TPL_END'] = '.tpl.js';
+	wf.CONF['VIEW_END'] = '.html';
+	wf.CONF['SCRIPT_END'] = '.script.js';
+	wf.CONF['MODEL_END'] = '.model.js';
+	wf.CONF['PROCESS_END'] = '.process.js';
+    wf.CONF["SQUEL_END"] = ".squel.js";
+	wf.CONF['OUT_END'] = '.out';
+	wf.CONF['LOG_END'] = '.log';
+    wf.CONF['ZIP_END'] = '.zip';
 
     /*** FILE NAME ***/
-    WF().CONF['INSTALL_FILE'] = "install.json";
+    wf.CONF['INSTALL_FILE'] = "install.json";

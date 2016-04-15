@@ -1,3 +1,3 @@
 // load your module here
-// GLOBAL.myModule = require('myModule');
+// global.myModule = require('myModule');
 //

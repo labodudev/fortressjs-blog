@@ -9,7 +9,7 @@ module.exports.LoadApps = LoadApps;
 module.exports.LoadHooks = LoadHooks;
 module.exports.LoadEngines = LoadEngines;
 module.exports.LoadModels = LoadModels;
-GLOBAL.next = function(req, res)
+global.next = function(req, res)
 {
   UTILS.LoopExec(req, res);
 }
@@ -398,21 +398,21 @@ function LoadModels()
 }
 
 /******************************* APP UTILS **********************************/
-GLOBAL.loadView = function(req, res, v)
+global.loadView = function(req, res, v)
 {
     if(req.app[req.loop].view[v] !== undefined)
     {
       res.tpl.inner += req.app[req.loop].view[v];
     }
 }
-GLOBAL.getView = function(req, res, v)
+global.getView = function(req, res, v)
 {
     if(req.app[req.loop].view[v] !== undefined)
     {
       return req.app[req.loop].view[v];
     }
 }
-GLOBAL.endView = function(req, res, v)
+global.endView = function(req, res, v)
 {
     req.continue = false;
     if(req.app[req.loop].view[v] !== undefined)
