@@ -1,6 +1,7 @@
 var test;
 // TEST config.core.js
 test = require('../config.core.js');
+WF().CONF['ERROR'] = true;
 for(var exp in test)
 {
 		var tested = new test[exp]();
@@ -14,8 +15,8 @@ require('../httpsutil.core.js');
 
 // TEST log.core.js
 test = require('../log.core.js');
-test.Log('ok');
-test.Error('ok');
+test.Log('Log ok');
+test.Error('Error ok');
 
 // TEST mkdirp.core.js
 require('../mkdirp.core.js');
@@ -29,3 +30,5 @@ for(var exp in test)
 
 // TEST router.core.js
 require('../router.core.js');
+
+console.log('[+] CORE TEST OK');

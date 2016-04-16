@@ -143,6 +143,7 @@ function getModulesArray(p, c)
 
 function hookMod(req, res, p)
 {
+	if(!req.srv || !req.host || !req.zone) return;
     var mArr = wf.SERVERS[req.srv].HOSTS[req.host].ZONES[req.zone].MODS[p];
     req.modPath = p;
 	for(var mod in mArr)

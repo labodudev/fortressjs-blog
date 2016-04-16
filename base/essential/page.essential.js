@@ -144,6 +144,7 @@ function getPageModulesArray(c, state)
 
 function addPage(req, res)
 {
+	if(!req.zone || !req.page) return;
   var page = req.HOST.ZONES[req.zone].PAGES[req.page];
   var exec = UTILS.Clone(page.exec)
   if(exec.code) exec.code(req, res);
