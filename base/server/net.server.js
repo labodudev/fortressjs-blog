@@ -7,17 +7,34 @@ http://seraum.com
 var wf = WF();
 wf.AppServer.net = Net;
 
-var Net = function(srv)
+function Net(srv)
 {
-    function netHandler(sock)
+    function netHandler(socket)
     {
-        sock.srv = srv;
+		socket.id = socket.remoteAddress + "_" + socket.remotePort;
+        socket.srv = srv;
         // DEFAUL HOST IS LOCAL BECAUSE OF PROTOCOL
-        sock.app = wf.SERVERS[srv].HOSTS['local'].appArray;
-        // FORGE HOST
-        sock.HOST = wf.SERVERS[srv].HOSTS['local'];
-        // DO
-        wf.LoopExec(sock, sock);
+		if(wf.SERVERS[srv].HOSTS['local'])
+		{
+			socket.app = wf.SERVERS[srv].HOSTS['local'].appArray;
+			// FORGE SERVERS
+			socket.SERVER = wf.SERVERS[srv];
+			// FORGE HOST
+			socket.HOST = socket.SERVER.HOSTS['local'];
+			// Set CLIENTS
+			socket.SERVER.CLIENTS[socket.id] = socket;
+			// Set disconnect function
+			socket.on('end', function()
+			{
+				delete socket.SERVER.CLIENTS[socket.id];
+			});
+			// DO
+			wf.LoopExec(socket, socket);
+		}
+		else
+		{
+			wf.Log("Local host is not defined");
+		}
     }
 
     wf.SERVERS[srv].CLIENTS = {};
