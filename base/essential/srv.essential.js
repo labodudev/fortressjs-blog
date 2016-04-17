@@ -179,7 +179,8 @@ function LoadServer(id)
             {
               wf.SERVERS[d] = tmpConf;
               wf.SERVERS[d].id = d;
-			  wf.SERVERS[d].CLIENTS = [];
+			  wf.SERVERS[d].CLIENTS = {};
+			  wf.SERVERS[d].HANDLES = {};
             }
             
           }
