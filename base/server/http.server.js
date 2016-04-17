@@ -30,7 +30,8 @@ function HttpServer(srv)
             req.srv = srv;
             req.srvId = srv;
             req.hostId = wf.SERVERS[srv].HOSTMAP[req.host];
-            req.HOST = wf.SERVERS[srv].HOSTS[wf.SERVERS[srv].HOSTMAP[req.host]];
+			req.SERVER = wf.SERVERS[srv];
+            req.HOST = req.SERVER.HOSTS[wf.SERVERS[srv].HOSTMAP[req.host]];
             req.app = req.HOST.appArray;
             wf.LoopExec(req, res);
         }
@@ -40,7 +41,8 @@ function HttpServer(srv)
             req.srv = srv;
             req.srvId = srv;
             req.hostId = wf.SERVERS[srv].HOSTS[wf.SERVERS[srv].HOSTMAP['*']];
-            req.HOST = wf.SERVERS[srv].HOSTS[wf.SERVERS[srv].HOSTMAP['*']];
+            req.SERVER = wf.SERVERS[srv];
+            req.HOST = req.SERVER.HOSTS[wf.SERVERS[srv].HOSTMAP['*']];
             req.app = wf.SERVERS[srv].HOSTS[wf.SERVERS[srv].HOSTMAP['*']].appArray;
             // START ENGINE/APP LOOP
             wf.LoopExec(req, res);
