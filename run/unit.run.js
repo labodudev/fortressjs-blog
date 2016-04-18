@@ -11,8 +11,10 @@ wf.CONF["BASE_PATH"] = wf.CONF["MAIN_PATH"] + "base" + "/";
 // Get global var
 require('../start/load.start.js');
 
+// LOAD CONF
 wf.Load.Base("conf", wf.CONF['MAIN_PATH']);
-
+// LOAD TEST 
+wf.Load.Base("test", wf.CONF['BASE_PATH']);
 
 // CREATE GLOBAL WF CONF
 
@@ -76,3 +78,4 @@ function endsWith(haystack, needle)
 {
   return haystack.indexOf(needle, haystack.length - needle.length) !== -1;
 }
+

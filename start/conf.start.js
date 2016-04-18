@@ -32,7 +32,6 @@ else
     wf.Load.Base("server");
 	wf.Load.Base("layer");
 	wf.Load.Base("model");
-    //wf.Load.Base("trading");
 	wf.Load.Base("worker");
 
     // LOG ERRORS BUT DON'T STOP THREAD
