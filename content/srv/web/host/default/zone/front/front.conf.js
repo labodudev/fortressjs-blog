@@ -1,10 +1,10 @@
-	var frontConf =
-	{
-	    'uri': 'front',
-		'state': true,
-		'pos': 0,
-		'shared': 'jail',
-        'cache': '*'
-	}
+var frontConf =
+{
+	'uri': 'front',
+	'state': true,
+	'pos': 0,
+	'shared': 'jail',
+	'cache': ['.js', '.css'] // '*' => cache all files
+}
 
-	module.exports.frontConf = frontConf;
+module.exports = frontConf;

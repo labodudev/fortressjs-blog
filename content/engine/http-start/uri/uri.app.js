@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.uriEngine = new uriEngine();
+module.exports = uriEngine;
 
 function uriEngine()
 {    

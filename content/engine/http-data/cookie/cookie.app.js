@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.HttpCookie = new HttpCookie();
+module.exports = HttpCookie;
 
 function HttpCookie()
 {

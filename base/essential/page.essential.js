@@ -69,7 +69,7 @@ function PageConf(_path, _name)
 {
 	this.path = _path + _name + "/";
     this.name = _name;
-    this.config = { "state": true, "pos": 100, "cached": false, "view": "view", "uri": this.name, };
+    this.config = { "state": true, "pos": 100, "view": "view", "uri": this.name, };
 
 	this.readConf = function()
 	{
@@ -77,20 +77,14 @@ function PageConf(_path, _name)
 		if(fs.existsSync(file))
 		{
 			try
-            {
-              var pageConf = require (file);
-              for(var prop in pageConf)
-              {
-                for(var index in pageConf[prop])
-                {
-                  this.config[index] = pageConf[prop][index];
-                }
-              }
-            }
-            catch(e)
-            {
-              console.log("[!] Error conf : " + file);
-            }
+			{
+			  this.config = require(file);
+			  UTILS.defaultConf(this.config, {uri:this.name,view:"view"});
+			}
+			catch(e)
+			{
+			  console.log("[!] Error conf : " + file);
+			}
 		}
 	}
     
@@ -204,26 +198,7 @@ function LoadPages()
               var cTmp = require(pDir + pTmp.name + "/" + pTmp.name + wf.CONF['PAGE_END']);
               if(typeof cTmp == "function")  
               {
-                  cTmp = new cTmp();
-                  
-                  //var eTmp = {};
-
-                  /*
-                  for( var c in cTmp)
-                  {
-                    let cc = c;
-                    var fn = new cTmp[c]();
-                    for(var f in cTmp[c])
-                    {
-                      let ff = f;
-                      if(typeof(cTmp[cc][ff]) == "function")
-                      {
-                        cTmp[cc][ff].getView = function(view){console.log("ok")};
-                        eTmp[ff] = cTmp[cc][ff];
-                      }
-                    }
-                  }
-                  */
+                  cTmp = new cTmp(pTmp);
                   wf.SERVERS[v].HOSTS[w].ZONES[x].PAGES[y] = {'path': pDir, 'name': pTmp.name, 'uri':pTmp.conf.config.uri, 'conf': pTmp.conf, 'exec': cTmp, 'view':pTmp.view };
               }
             }

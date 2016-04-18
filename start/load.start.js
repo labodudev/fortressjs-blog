@@ -64,6 +64,20 @@ wf.Clone = function(obj)
 }
 UTILS.Clone = wf.Clone;
 
+UTILS.defaultConf = function(config, more)
+{
+	if(!config) config = {};
+	if(config.state === undefined) config.state = true;
+	if(!config.pos === undefined) config.pos = 100;
+	if(more)
+	{
+		for(var m in more)
+		{
+			if(!config[m]){config[m] = more[m];}
+		}
+	}
+}
+
 wf.Load = new function(){
 
 	/* PUBLIC */

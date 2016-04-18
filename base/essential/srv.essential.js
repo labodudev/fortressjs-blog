@@ -162,34 +162,23 @@ function LoadServer(id)
 		hArr.forEach(function(d)
 		{
 
-      var conf = d + wf.CONF['CONFIG_END'];
+			var conf = d + wf.CONF['CONFIG_END'];
 			if ( fs.existsSync(sDir + d + '/' + conf) && fs.lstatSync(sDir + d + '/' + conf).isFile() && d != "." && d != ".." &&
 				( full || d == id) )
 			{
-
-        try
-        {
-          var srvConf = require (sDir + d + '/' + conf);
-        
-          for(var prop in srvConf)
-          {
-            var tmpConf = srvConf[prop];
-
-            if(tmpConf.state == true)
-            {
-              wf.SERVERS[d] = tmpConf;
-              wf.SERVERS[d].id = d;
-			  wf.SERVERS[d].CLIENTS = {};
-			  wf.SERVERS[d].HANDLES = {};
-            }
-            
-          }
-        }
-        catch(e)
-        {
-          console.log("[!] Error conf : " + sDir + d + '/' + conf);
-        }
-      }
+			  try
+			  {
+				var srvConf = require (sDir + d + '/' + conf);
+				wf.SERVERS[d] = srvConf;
+				wf.SERVERS[d].id = d;
+				wf.SERVERS[d].CLIENTS = {};
+				wf.SERVERS[d].HANDLES = {};
+			  }
+			  catch(e)
+			  {
+				  console.log("[!] Error Server conf : " + sDir + d + '/' + conf);
+			  }
+			}
 		});
 	}
 }

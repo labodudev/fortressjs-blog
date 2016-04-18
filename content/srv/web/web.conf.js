@@ -17,4 +17,4 @@ var webConf=
     },
     "map": ["start", "app", "default", "route", "error" ] // Order app/engine launching map
 }
-module.exports.webConf = webConf;
+module.exports = webConf;

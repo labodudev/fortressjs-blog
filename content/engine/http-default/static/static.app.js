@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.RouteStatic = new RouteStatic();
+module.exports = RouteStatic;
 function RouteStatic()
 {
     var wf = WF();
@@ -37,7 +37,7 @@ function RouteStatic()
             });
             res.end(req.HOST.ZONES[req.zone].shared[sUrl].buffer);
         }
-        else if(req.HOST.ZONES[req.zone] && req.HOST.ZONES[req.zone].conf.shared !== undefined )
+        else if(req.HOST.ZONES[req.zone].conf && req.HOST.ZONES[req.zone].conf.shared !== undefined )
         {
             var f = "";
             if ( req.url.indexOf("/" + req.zone) == 0)

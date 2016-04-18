@@ -70,22 +70,15 @@ function App(_path, _name)
 			var file = this.path + "/" + this.name + "/" + this.name + wf.CONF['CONFIG_END'];
 			if(fs.existsSync(file))
 			{
-
-        try
-        {
-          var appConf = require (file);
-				  for(var prop in appConf)
-				  {
-  					for(var index in appConf[prop])
-            {
-              this.config[index] = appConf[prop][index];
-            }
-          }
-        }
-        catch(e)
-        {
-          console.log("[!] Error conf : " + file);
-        }
+				try
+				{
+				  this.config = require(file);
+				  UTILS.defaultConf(this.config);
+				}
+				catch(e)
+				{
+				  console.log("[!] Error conf : " + file);
+				}
 			}
 		}
 		this.checkState = function(state)
@@ -161,24 +154,26 @@ function LoadEngines()
          var mTmp = new App(tmpD, tmpA[m]);
          if(mTmp.appState && mTmp.conf.config['state'])
          {
-           var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
-           var eTmp = {}
-           for( var c in cTmp)
-           {
-             for(var f in cTmp[c])
-             {
-               if(typeof(cTmp[c][f]) == "function")
-                 eTmp[f] = cTmp[c][f];
-             }
-           }
-               /*
+			 
+			var eTmp = {};
+			try 
+			{
+				var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+				if(cTmp && typeof cTmp == "function")
+				{
+					eTmp = new cTmp(mTmp);
+					/*
 
-                LOAD EXEC VAR
+					LOAD EXEC VAR
 
-              */
-              if(eTmp.code !== undefined && typeof eTmp.code === "function") eTmp.execute = true;
-              eTmp.path = mTmp.conf.path + mTmp.name + "/";
-              eTmp.conf = mTmp.conf;
+					*/
+					if(eTmp.code !== undefined && typeof eTmp.code === "function") eTmp.execute = true;
+				}
+			}
+			catch(e)
+			{
+				console.log("Error in Engine : " + tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END'])
+			}
 
           // LOAD IN ARRAY
            wf.ENGINES[pArr[p]].push({'path': tmpD, 'name': mTmp.name, 'conf': mTmp.conf, 'place': pArr[p], 'exec': eTmp, 'view': mTmp.view });
@@ -208,51 +203,60 @@ function LoadApps()
       if(wf.SERVERS[s] !== undefined)
       {
 		  var pDir = wf.CONF['SRV_PATH'] + s + '/' + wf.CONF['APP_FOLDER'];
+		  wf.SERVERS[s].APPS = {};
+		  
 		  if(fs.existsSync(pDir) && fs.lstatSync(pDir).isDirectory())
 		  {
-			wf.SERVERS[s].APPS = {};
 			var pArr = fs.readdirSync(pDir);
 			var pArrL = pArr.length;
 			for(var p = 0; p < pArrL; p++)
 			{
 			  wf.SERVERS[s].APPS[pArr[p]] = [];
 			  var tmpD = pDir + pArr[p] + "/";
-			  var tmpA = fs.readdirSync(tmpD);
-			  var tL = tmpA.length;
-			  for(var m = 0; m < tL; m++)
+			  if(fs.lstatSync(tmpD).isDirectory())
 			  {
-				var mTmp = new App(tmpD, tmpA[m]);
-				if(mTmp.appState && mTmp.conf.config['state'])
-				{
-				  var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
-				  var eTmp = {}
-				  for( var c in cTmp)
+				  var tmpA = fs.readdirSync(tmpD);
+				  var tL = tmpA.length;
+				  for(var m = 0; m < tL; m++)
 				  {
-                    for(var f in cTmp[c])
-                    {
-                      if(typeof(cTmp[c][f]) == "function")
-                      eTmp[f] = cTmp[c][f];
-                    }
+					var mTmp = new App(tmpD, tmpA[m]);
+					if(mTmp.appState && mTmp.conf.config['state'])
+					{
+					  /*
+					  
+						Load app code with app conf
+					  
+					  */
+					  var eTmp = {};
+					  try
+					  {
+						var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+						if(cTmp && typeof cTmp == "function")
+						{
+							eTmp = new cTmp(mTmp);
+							/*
+
+								LOAD EXEC VAR
+
+							*/
+							if(eTmp.code !== undefined && typeof eTmp.code === "function") eTmp.execute = true;
+						}
+					  }
+					  catch(e)
+					  {
+						console.log("Error in App : " +  tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+					  }
+					  // LOAD IN ARRAY
+					  wf.SERVERS[s].APPS[pArr[p]].push(
+					  {
+						  'path': tmpD, 'name': mTmp.name, 'conf': mTmp.conf, 'place': pArr[p], 'exec': eTmp, 'view': mTmp.view,
+					  });
+					}
 				  }
-                  /*
-
-                    LOAD EXEC VAR
-
-                  */
-                  if(eTmp.code !== undefined && typeof eTmp.code === "function") eTmp.execute = true;
-                  eTmp.path = mTmp.conf.path + mTmp.name + "/";
-                  eTmp.conf = mTmp.conf;
-
-                    // LOAD IN ARRAY
-				  wf.SERVERS[s].APPS[pArr[p]].push(
-				  {
-					  'path': tmpD, 'name': mTmp.name, 'conf': mTmp.conf, 'place': pArr[p], 'exec': eTmp, 'view': mTmp.view,
-				  });
-				}
+				  wf.SERVERS[s].APPS[pArr[p]].sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+				  var result = wf.SERVERS[s].APPS[pArr[p]];
+				  wf.SERVERS[s].APPS[pArr[p]] = result;
 			  }
-			  wf.SERVERS[s].APPS[pArr[p]].sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
-			  var result = wf.SERVERS[s].APPS[pArr[p]];
-			  wf.SERVERS[s].APPS[pArr[p]] = result;
 			}
 		  }
       }
@@ -293,53 +297,45 @@ function LoadHooks()
             if(app.appState && app.conf.config['state'] && app.conf.config.hook !== undefined)
             {
               // CHARGEMENT DU HOOK ET FONCTIONS
-              var cTmp = require(p + app.name + "/" + app.name + wf.CONF['APP_END']);
-              var eTmp = {}
-              for( var c in cTmp)
-              {
-                for(var f in cTmp[c])
-                {
-                  if(typeof(cTmp[c][f]) == "function")
-                  eTmp[f] = cTmp[c][f];
-                }
-              }
+			  var eTmp = {};
+			  try
+			  {
+				var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+				if(cTmp && typeof cTmp == "function")
+				{
+					eTmp = new cTmp(app);
+					
+					/*
 
-               /*
+					LOAD EXEC VAR
 
-                LOAD EXEC VAR
+					*/
+					if(eTmp.code !== undefined && typeof eTmp.code === "function") eTmp.execute = true;
+					if(eTmp.runOnce && process.env.wrkId && process.env.wrkId == 0)
+					{
+						eTmp.runOnce();
+					}
 
-              */
-              if(eTmp.code !== undefined && typeof eTmp.code === "function") eTmp.execute = true;
-              if(eTmp.runOnce && process.env.wrkId && process.env.wrkId == 0)
-              {
-                  eTmp.runOnce();
-              }
-              eTmp.path = app.conf.path + app.name + "/";
-              eTmp.conf = app.conf;
-              eTmp.load = function(v)
-              {
-                if(app.view[v] !== undefined)
-                {
-                   UTILS.LoopExec(eTmp.exec.req, eTmp.exec.res);
-                }
-              }
-
-            eTmp.getView = function(v)
-            {
-              if(app.view[v] !== undefined)
-              {
-                return app.view[v];
-              }
-            }
+					eTmp.getView = function(v)
+					{
+						if(app.view[v] !== undefined)
+						{
+							return app.view[v];
+						}
+					}
+				}
+			  }
+			  catch(e)
+			  {
+				 console.log("Error in Hooks : " +  tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+			  }
+			  
+			  
 
 
             // LOAD IN ARRAY
             if(hArr[app.conf.config.hook] === undefined) hArr[app.conf.config.hook] = [];
             hArr[app.conf.config.hook].push({'name': app.name, 'hooked': true, 'conf': app.conf, 'exec': eTmp, 'view': app.view });
-
-
-
-
 
             }
 				  }
@@ -380,15 +376,19 @@ function LoadModels()
 			var mArr = (wf).Load.loadFiles(wf.CONF['MODEL_END'], p, true);
             if(mArr != undefined && mArr != null)
             {
-			     var j = mArr.length;
-			     for(var i = 0; i < j; i++)
-			     {
-				        var mTmp = require(p + mArr[i]);
-				        for( var m in mTmp)
-				        {
-					       wf.SERVERS[s].HOSTS[h].MODELS[m] = mTmp[m];
-				        }
-			     }
+				var j = mArr.length;
+				for(var i = 0; i < j; i++)
+				{
+					var name = mArr[i].split(wf.CONF['MODEL_END'])[0]; 
+					try
+					{
+						wf.SERVERS[s].HOSTS[h].MODELS[name] = require(p + mArr[i]);
+					}
+					catch(e)
+					{
+						console.log("[!] Error conf : " + p + mArr[i]);
+					}
+				}
             }
           }
         }

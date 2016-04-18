@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.dataEngine = new dataEngine();
+module.exports = dataEngine;
 var wf = WF();
 
 function dataEngine()

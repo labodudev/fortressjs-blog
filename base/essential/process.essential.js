@@ -32,22 +32,23 @@ function Process(_path, _name)
 
 function ProcessConf(_path, _name)
 {
-		this.path = _path + _name + "/";
-		this.name = _name;
-		this.config = { "state": true, "pos": 100, restart: 'none', 'attempt': 5, 'delay': 3000, 'started': 10000, 'wait': false, cmd:'', args: [], options: {} };
+	this.path = _path + _name + "/";
+	this.name = _name;
+	this.config = { "state": true, "pos": 100, restart: 'none', 'attempt': 5, 'delay': 3000, 'started': 10000, 'wait': false, cmd:'', args: [], options: {} };
 
 	this.readConf = function()
 	{
 		var file = this.path + this.name + wf.CONF['CONFIG_END'];
 		if(fs.existsSync(file))
 		{
-			var processConf = require(file);
-			for(var prop in processConf)
+			try
 			{
-				for(var index in processConf[prop])
-				{
-					this.config[index] = processConf[prop][index];
-				}
+			  this.config = require(file);
+			  UTILS.defaultConf(this.config);
+			}
+			catch(e)
+			{
+			  console.log("[!] Error process conf : " + file);
 			}
 		}
 	}
@@ -81,27 +82,14 @@ function LoadProcess()
 		 var proc = new Process(c, d);
 		 if(proc.processState && proc.conf.config['state'])
 		 {
-			if(proc.process !== undefined && fs.existsSync(proc.process))
-			{
-			   var sFile = require(proc.process);
-			   for(var prop in sFile)
-			   {
-				 for(var index in sFile[prop])
-				 {
-				   proc[index] = sFile[prop][index];
-				 }
-			   }
-			}
-			sArr.push(proc);
+			 sArr.push(proc);
 		 }
 	   }
 	 });
-
     sArr.sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
   }
 
-	//wf.PROCESS = sArr;
-
+	wf.PROCESS = sArr;
   var sL = sArr.length;
   for( var i = 0; i < sL; i++)
   {

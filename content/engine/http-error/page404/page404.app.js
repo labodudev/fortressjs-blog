@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.send404 = new send404();
+module.exports = send404;
 
 function send404()
 {

@@ -43,13 +43,13 @@ function ScriptConf(_path, _name)
 		var file = this.path + this.name + wf.CONF['CONFIG_END'];
 		if(fs.existsSync(file))
 		{
-			var scriptConf = require(file);
-			for(var prop in scriptConf)
+			try
 			{
-				for(var index in scriptConf[prop])
-				{
-					this.config[index] = scriptConf[prop][index];
-				}
+			  this.config = require(file);
+			}
+			catch(e)
+			{
+			  console.log("[!] Error conf : " + file);
 			}
 		}
 	}

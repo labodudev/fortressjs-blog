@@ -11,6 +11,7 @@ var hostConf=
 
     "app":
     {
+		"log": "Logger app"
     },
 }
-module.exports.hostConf = hostConf
+module.exports = hostConf

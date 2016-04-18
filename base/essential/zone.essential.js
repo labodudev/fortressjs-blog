@@ -112,31 +112,24 @@ function Zone(_path, _name)
 function ZoneConf(_path, _name)
 {
 
-		this.path = _path + _name + '/';
-		this.name = _name;
-  this.config = { "version": "", "state": true, "css": "", "tpl": "", "uri": this.name };
+	this.path = _path + _name + '/';
+	this.name = _name;
+	var defConf = { "version": "0.0.0.0", "uri": this.name };
 
 	this.readConf = function()
 	{
 		var file = this.path + this.name + wf.CONF['CONFIG_END'];
 		if(fs.existsSync(file))
 		{
-
-      try
-        {
-          var zoneConf = require (file);
-				  for(var prop in zoneConf)
-				  {
-  					for(var index in zoneConf[prop])
-            {
-              this.config[index] = zoneConf[prop][index];
-            }
-          }
-        }
-        catch(e)
-        {
-          console.log("[!] Error conf : " + file);
-        }
+			try
+			{
+			  this.config = require(file);
+			  UTILS.defaultConf(this.config, defConf);
+			}
+			catch(e)
+			{
+			  console.log("[!] Error process conf : " + file);
+			}
 		}
 	}
 	this.readCss = function()

@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.RouteZone = new Zone();
+module.exports = Zone;
 function Zone()
 {
 	this.code = function(req, res)

@@ -38,23 +38,17 @@ function HostConf(_path, _name)
 
 		this.path = _path + _name + "/";
 		this.name = _name;
-    this.config = { "version": "", "state": true, "css": "", "tpl": "", 'app': {}, };
+		var defConf = { "version": "0.0.0.0" };
 
 	this.readConf = function()
 	{
 		var file = this.path + this.name + wf.CONF['CONFIG_END'];
 		if(fs.existsSync(file))
 		{
-		  try
+			try
 			{
-			  var hostConf = require (file);
-					  for(var prop in hostConf)
-					  {
-						for(var index in hostConf[prop])
-				{
-				  this.config[index] = hostConf[prop][index];
-				}
-			  }
+			  this.config = require(file);
+			  UTILS.defaultConf(this.config, defConf);
 			}
 			catch(e)
 			{
