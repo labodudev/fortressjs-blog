@@ -13,35 +13,22 @@ require('../start/load.start.js');
 
 // LOAD CONF
 wf.Load.Base("conf", wf.CONF['MAIN_PATH']);
-// LOAD TEST 
-wf.Load.Base("proto");
-wf.Load.Base("essential");
-wf.Load.Base("core");
-wf.Load.Base("util");
-wf.Load.Base("layer");
-wf.Load.Base("model");
-wf.Load.Base("master");
-wf.Load.Base("test");
-// CREATE GLOBAL WF CONF
 
-wf.LoadProcess();
-wf.LoadServer();
-wf.LoadHost(); // LOAD HOST FOR SRV
-wf.LoadZones(); // LOAD ZONES
-wf.LoadPages(); // LOAD PAGES IF ANY
-wf.LoadEngines(); // LOAD ENGINES
-wf.LoadServerEngine(); // LOAD ENGINES FOR SRV
-wf.LoadApps(); // LOAD APPS FOR HOST
-wf.LoadHooks(); // LOAD HOOKS
-wf.LoadModels(); // LOAD MODELS
-wf.LoadAppArray(); // LOAD APP ARRAY FOR EACH HOST
+// remove useless files
+var useless = wf.CONF['USELESS'];
+checkUseless(wf.CONF['MAIN_PATH'], doClean);
+doBuild();
 
-var test = wf.CONF['TEST_END'];
 
-// start test 
-checkTest(wf.CONF['MAIN_PATH'], doTest);
 
-function doTest(err, results)
+/****** UTILS ********/
+
+function doBuild()
+{
+	
+}
+
+function doClean(err, results)
 {
 	if(err)
 	{
@@ -52,12 +39,20 @@ function doTest(err, results)
 		var j = results.length;
 		for(var i = 0; i < j; i++)
 		{
-				require(results[i]);
+			var err = fs.unlinkSync(results[i]);
+			if(err)
+			{
+				console.log("[!] Unlink error -> " + results[i]);
+			}
+			else
+			{
+				console.log("[-] Deleted -> " + results[i]);
+			}
 		}
 	}
 }
 
-function checkTest(dir, done) 
+function checkUseless(dir, done) 
 {
   var results = [];
   fs.readdir(dir, function(err, list) 
@@ -72,15 +67,22 @@ function checkTest(dir, done)
 	  {
         if (stat && stat.isDirectory()) 
 		{
-          checkTest(file, function(err, res) 
+          checkUseless(file, function(err, res) 
 		  {
             results = results.concat(res);
             if (!--pending) done(null, results);
           });
         } else 
 		{
-			if(endsWith(file, test))
-				results.push(file);
+			var j = useless.length;
+			for(var i = 0; i < j; i++)
+			{
+				if(endsWith(file, useless[i]))
+				{
+					results.push(file);
+					break;
+				}
+			}
           if (!--pending) done(null, results);
         }
       });
