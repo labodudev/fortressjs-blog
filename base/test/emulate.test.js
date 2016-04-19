@@ -5,6 +5,7 @@ function Emulate()
 	
 	this.res = 
 	{
+		write: function(writable) { console.log("[+] res.write -> " + writable) },
 		end: function(writable){ console.log("[+] res.end -> " + writable) },
 	}
 	
@@ -12,6 +13,10 @@ function Emulate()
 	{
 		url: "/test",
 		method: "GET",
+		connection: 
+		{
+			remoteAddress: "127.0.0.1",
+		}
 	}
 	
 }
