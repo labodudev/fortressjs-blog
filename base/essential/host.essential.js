@@ -230,7 +230,9 @@ function loadWithMap(s, h, map)
             if(wf.SERVERS[s].engineArray[tt].init && wf.SERVERS[s].engineArray[tt].init.at)
             {
 				if(aMap[iMap[wf.SERVERS[s].engineArray[tt].init.at]])
+				{
 					aMap[iMap[wf.SERVERS[s].engineArray[tt].init.at]].push(wf.SERVERS[s].engineArray[tt]);
+				}
             }
         }
     }

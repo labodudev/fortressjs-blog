@@ -7,7 +7,7 @@ var webConf=
     "thread": 2, // int value or os.cpus().length
     "engine": 
     {
-      "http-start": {at: "none"},
+      "http-start": {at: "start"},
       "http-data": {at: "start"},
       "http-zone": {at: "start"},
       "http-page": {at: "start"},

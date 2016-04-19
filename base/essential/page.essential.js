@@ -40,7 +40,7 @@ function Page(_path, _name)
                     var dArrL = dArr.length;
                     for(var d = 0; d < dArrL; d++)
                     {
-                          if(dArr[d].endsWith(wf.CONF['VIEW_END']))
+                          if(wfStringEndsWith(dArr[d], wf.CONF['VIEW_END']))
                           {
                             var ind = dArr[d].replace(wf.CONF['VIEW_END'], "");
                             this.view[ind] = fs.readFileSync(v + dArr[d], 'utf8');
