@@ -25,16 +25,27 @@ wf.Load.Base("test");
 // CREATE GLOBAL WF CONF
 
 wf.LoadProcess();
+Tested("LoadProcess");
 wf.LoadServer();
+Tested("LoadServer");
 wf.LoadHost(); // LOAD HOST FOR SRV
+Tested("LoadHost");
 wf.LoadZones(); // LOAD ZONES
+Tested("LoadZones");
 wf.LoadPages(); // LOAD PAGES IF ANY
+Tested("LoadPages");
 wf.LoadEngines(); // LOAD ENGINES
+Tested("LoadEngines");
 wf.LoadServerEngine(); // LOAD ENGINES FOR SRV
+Tested("LoadServerEngine");
 wf.LoadApps(); // LOAD APPS FOR HOST
+Tested("LoadApps");
 wf.LoadHooks(); // LOAD HOOKS
+Tested("LoadHooks");
 wf.LoadModels(); // LOAD MODELS
+Tested("LoadModels");
 wf.LoadAppArray(); // LOAD APP ARRAY FOR EACH HOST
+Tested("LoadAppArray");
 
 var test = wf.CONF['TEST_END'];
 
@@ -94,3 +105,7 @@ function endsWith(haystack, needle)
   return haystack.indexOf(needle, haystack.length - needle.length) !== -1;
 }
 
+function Tested(msg)
+{
+	console.log("[+] " + msg + " OK");
+}
