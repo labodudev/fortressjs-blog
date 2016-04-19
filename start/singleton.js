@@ -44,11 +44,15 @@ var getInstance = function()
     {
       var srv = caller.split(single.CONF['SRV_FOLDER'])[1].split('/')[0];
       var host = caller.split(single.CONF['HOST_FOLDER'])[1].split('/')[0];
-      var result = 
-      {
-          HOST: single.SERVERS[srv].HOSTS[host],
-      };
-        return result;
+	  var result = {};
+	  if(single.SERVERS[srv])
+	  {
+		result = 
+		{
+			HOST: single.SERVERS[srv].HOSTS[host],
+		};
+	  }
+	  return result;
     }
 
     else if(single === undefined)

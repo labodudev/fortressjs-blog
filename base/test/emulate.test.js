@@ -1,4 +1,5 @@
 module.exports.Emulate = new Emulate();
+global.Emulate = new Emulate();
 
 function Emulate()
 {

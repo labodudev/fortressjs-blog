@@ -14,7 +14,6 @@ require('../start/load.start.js');
 // LOAD CONF
 wf.Load.Base("conf", wf.CONF['MAIN_PATH']);
 // LOAD TEST 
-wf.Load.Base("test", wf.CONF['BASE_PATH']);
 wf.Load.Base("proto");
 wf.Load.Base("essential");
 wf.Load.Base("core");
@@ -22,6 +21,7 @@ wf.Load.Base("util");
 wf.Load.Base("layer");
 wf.Load.Base("model");
 wf.Load.Base("master");
+wf.Load.Base("test");
 // CREATE GLOBAL WF CONF
 
 wf.LoadProcess();
