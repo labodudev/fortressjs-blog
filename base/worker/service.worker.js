@@ -27,7 +27,7 @@ function WorkerService()
       
       wf.LoadServer(process.env.srvId); // LOAD SRV
       wf.LoadScripts();
-      wf.LoadHosts(); // LOAD HOST FOR SRV
+      wf.LoadHost(); // LOAD HOST FOR SRV
       wf.LoadZones(); // LOAD ZONES
       wf.LoadPages(); // LOAD PAGES IF ANY
       wf.LoadEngines(); // LOAD ENGINES

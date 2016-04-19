@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.LoadHosts = LoadHosts;
+module.exports.LoadHost = LoadHost;
 module.exports.CreateHost = Host;
 module.exports.LoadAppArray = LoadAppArray;
 var wf = WF();
@@ -94,7 +94,7 @@ function hookHostCss(name)
 	}
 }
 
-function LoadHosts()
+function LoadHost()
 {
 
   for(var srv in wf.SERVERS)
