@@ -12,7 +12,7 @@ module.exports.LoadModels = LoadModels;
 global.next = function(req, res)
 {
   UTILS.LoopExec(req, res);
-}
+};
 var wf = WF();
 
 function App(_path, _name)
@@ -20,13 +20,13 @@ function App(_path, _name)
 			/* CONSTRUCTOR 	*/
 			this.path = _path + _name + "/";
 			this.name = _name;
-				this.view = {}
+			this.view = {};
 			/*				*/
 
 
 			this.checkApp = function()
 			{
-				var file = this.path + this.name + wf.CONF['APP_END'];
+				var file = this.path + this.name + wf.CONF.APP_END;
 
 				if(fs.existsSync(file))
 				{
@@ -34,7 +34,7 @@ function App(_path, _name)
 					this.app = file;
 				}
 				else this.appState = false;
-			}
+			};
 
       this.loadViews = function()
       {
@@ -46,14 +46,14 @@ function App(_path, _name)
 			var darrL = dArr.length;
             for(var d = 0; d < darrL; d++)
             {
-                if(dArr[d].endsWith(wf.CONF['VIEW_END']))
+                if(dArr[d].endsWith(wf.CONF.VIEW_END))
                 {
-                  var ind = dArr[d].replace(wf.CONF['VIEW_END'], "");
+                  var ind = dArr[d].replace(wf.CONF.VIEW_END, "");
                   this.view[ind] = fs.readFileSync(v + dArr[d]);
                 }
             } 
         }
-      }
+      };
 
 			this.checkApp();
 			this.conf = new AppConf(_path, _name);
@@ -67,7 +67,7 @@ function App(_path, _name)
 
 		this.readConf = function()
 		{
-			var file = this.path + "/" + this.name + "/" + this.name + wf.CONF['CONFIG_END'];
+			var file = this.path + "/" + this.name + "/" + this.name + wf.CONF.CONFIG_END;
 			if(fs.existsSync(file))
 			{
 				try
@@ -80,24 +80,14 @@ function App(_path, _name)
 				  console.log("[!] Error conf : " + file);
 				}
 			}
-		}
-		this.checkState = function(state)
-		{
-			if(state == "true") this.config['state'] = true;
-			else this.config['state'] = false;
-		}
-		this.checkPos = function(pos)
-		{
-			if(!isNan(this.config['pos'])) this.config['pos'] = parseInt(pos);
-		}
-
+		};
 		this.readConf();
 	}
 
 	function getAppArray(p)
 	{
 		var aArr = [];
-		var c = wf.CONF['APP_PATH'] + p + "/";
+		var c = wf.CONF.APP_PATH + p + "/";
 		if(fs.existsSync(c) && fs.lstatSync(c).isDirectory())
 		{
 			var dArr = fs.readdirSync(c);
@@ -106,14 +96,14 @@ function App(_path, _name)
 				if (fs.lstatSync(c +'/' + d).isDirectory() && d != "." && d != "..")
 				{
 					var app = new App(c, d);
-					if(app.appState && app.conf.config['state'])
+					if(app.appState && app.conf.config.state)
 					{
 						app.conf.config.place = p;
 						aArr.push(app);
 					}
 				}
 			});
-			aArr.sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+			aArr.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
 		}
 		return aArr;
 	}
@@ -136,7 +126,7 @@ function Launch(req, res)
 
 function LoadEngines()
 {
-   var pDir = wf.CONF['ENGINE_PATH']
+   var pDir = wf.CONF.ENGINE_PATH;
 
    if(fs.existsSync(pDir) && fs.lstatSync(pDir).isDirectory())
    {
@@ -152,13 +142,13 @@ function LoadEngines()
        for(var m = 0; m < tL; m++)
        {
          var mTmp = new App(tmpD, tmpA[m]);
-         if(mTmp.appState && mTmp.conf.config['state'])
+         if(mTmp.appState && mTmp.conf.config.state)
          {
 			 
 			var eTmp = {};
 			try 
 			{
-				var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+				var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF.APP_END);
 				if(cTmp && typeof cTmp == "function")
 				{
 					eTmp = new cTmp(mTmp);
@@ -172,14 +162,14 @@ function LoadEngines()
 			}
 			catch(e)
 			{
-				console.log("Error in Engine : " + tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END'])
+				console.log("Error in Engine : " + tmpD + mTmp.name + "/" + mTmp.name + wf.CONF.APP_END);
 			}
 
           // LOAD IN ARRAY
            wf.ENGINES[pArr[p]].push({'path': tmpD, 'name': mTmp.name, 'conf': mTmp.conf, 'place': pArr[p], 'exec': eTmp, 'view': mTmp.view });
          }
        }
-       wf.ENGINES[pArr[p]].sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+       wf.ENGINES[pArr[p]].sort(function(a, b){return a.conf.config['pos'] - b.conf.config.pos;});
        var result = wf.ENGINES[pArr[p]];
        wf.ENGINES[pArr[p]] = {};
        var pL = result.length;
@@ -202,7 +192,7 @@ function LoadApps()
     {
       if(wf.SERVERS[s] !== undefined)
       {
-		  var pDir = wf.CONF['SRV_PATH'] + s + '/' + wf.CONF['APP_FOLDER'];
+		  var pDir = wf.CONF.SRV_PATH + s + '/' + wf.CONF.APP_FOLDER;
 		  wf.SERVERS[s].APPS = {};
 		  
 		  if(fs.existsSync(pDir) && fs.lstatSync(pDir).isDirectory())
@@ -220,7 +210,7 @@ function LoadApps()
 				  for(var m = 0; m < tL; m++)
 				  {
 					var mTmp = new App(tmpD, tmpA[m]);
-					if(mTmp.appState && mTmp.conf.config['state'])
+					if(mTmp.appState && mTmp.conf.config.state)
 					{
 					  /*
 					  
@@ -230,7 +220,7 @@ function LoadApps()
 					  var eTmp = {};
 					  try
 					  {
-						var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+						var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF.APP_END);
 						if(cTmp && typeof cTmp == "function")
 						{
 							eTmp = new cTmp(mTmp);
@@ -244,7 +234,7 @@ function LoadApps()
 					  }
 					  catch(e)
 					  {
-						console.log("Error in App : " +  tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+						console.log("Error in App : " +  tmpD + mTmp.name + "/" + mTmp.name + wf.CONF.APP_END);
 					  }
 					  // LOAD IN ARRAY
 					  wf.SERVERS[s].APPS[pArr[p]].push(
@@ -253,7 +243,7 @@ function LoadApps()
 					  });
 					}
 				  }
-				  wf.SERVERS[s].APPS[pArr[p]].sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+				  wf.SERVERS[s].APPS[pArr[p]].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
 				  var result = wf.SERVERS[s].APPS[pArr[p]];
 				  wf.SERVERS[s].APPS[pArr[p]] = result;
 			  }
@@ -284,7 +274,7 @@ function LoadHooks()
 			 var hArr = {};
 
 			 wf.SERVERS[s].HOSTS[h].HOOKS = {};
-			 var p = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF['PLUGIN_FOLDER'];
+			 var p = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF.PLUGIN_FOLDER;
 
 			 if(fs.existsSync(p) && fs.lstatSync(p).isDirectory())
 			 {
@@ -294,13 +284,13 @@ function LoadHooks()
 				  if (fs.lstatSync(p +'/' + d).isDirectory() && d != "." && d != "..")
 				  {
             var app = new App(p, d);
-            if(app.appState && app.conf.config['state'] && app.conf.config.hook !== undefined)
+            if(app.appState && app.conf.config.state && app.conf.config.hook !== undefined)
             {
               // CHARGEMENT DU HOOK ET FONCTIONS
 			  var eTmp = {};
 			  try
 			  {
-				var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+				var cTmp = require(tmpD + mTmp.name + "/" + mTmp.name + wf.CONF.APP_END);
 				if(cTmp && typeof cTmp == "function")
 				{
 					eTmp = new cTmp(app);
@@ -311,7 +301,7 @@ function LoadHooks()
 
 					*/
 					if(eTmp.code !== undefined && typeof eTmp.code === "function") eTmp.execute = true;
-					if(eTmp.runOnce && process.env.wrkId && process.env.wrkId == 0)
+					if(eTmp.runOnce && process.env.wrkId && process.env.wrkId === 0)
 					{
 						eTmp.runOnce();
 					}
@@ -322,12 +312,12 @@ function LoadHooks()
 						{
 							return app.view[v];
 						}
-					}
+					};
 				}
 			  }
 			  catch(e)
 			  {
-				 console.log("Error in Hooks : " +  tmpD + mTmp.name + "/" + mTmp.name + wf.CONF['APP_END']);
+				 console.log("Error in Hooks : " +  tmpD + mTmp.name + "/" + mTmp.name + wf.CONF.APP_END);
 			  }
 			  
 			  
@@ -343,7 +333,7 @@ function LoadHooks()
 
 			   for(var o in hArr)
 			   {
-				 hArr[o].sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+				 hArr[o].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
 				 wf.SERVERS[s].HOSTS[h].HOOKS[o] = hArr[o];
 			   }
 			 }
@@ -371,15 +361,15 @@ function LoadModels()
           if(wf.SERVERS[s].HOSTS[h] !== undefined && wf.SERVERS[s].HOSTS[h].name !== undefined)
 		  {
 			wf.SERVERS[s].HOSTS[h].MODELS = {};
-			var p = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF['MODEL_FOLDER'];
+			var p = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF.MODEL_FOLDER;
 
-			var mArr = (wf).Load.loadFiles(wf.CONF['MODEL_END'], p, true);
-            if(mArr != undefined && mArr != null)
+			var mArr = (wf).Load.loadFiles(wf.CONF.MODEL_END, p, true);
+            if(mArr && mArr !== null)
             {
 				var j = mArr.length;
 				for(var i = 0; i < j; i++)
 				{
-					var name = mArr[i].split(wf.CONF['MODEL_END'])[0]; 
+					var name = mArr[i].split(wf.CONF.MODEL_END)[0]; 
 					try
 					{
 						wf.SERVERS[s].HOSTS[h].MODELS[name] = require(p + mArr[i]);
@@ -404,14 +394,14 @@ global.loadView = function(req, res, v)
     {
       res.tpl.inner += req.app[req.loop].view[v];
     }
-}
+};
 global.getView = function(req, res, v)
 {
     if(req.app[req.loop].view[v] !== undefined)
     {
       return req.app[req.loop].view[v];
     }
-}
+};
 global.endView = function(req, res, v)
 {
     req.continue = false;
@@ -420,5 +410,5 @@ global.endView = function(req, res, v)
       res.end(req.app[req.loop].view[v]);
     }
     else res.end("Undefined view");
-}
+};
 /****************************************************************************/

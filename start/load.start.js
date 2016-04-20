@@ -64,6 +64,16 @@ wf.Clone = function(obj)
 }
 UTILS.Clone = wf.Clone;
 
+UTILS.checkState = function(state)
+{
+	if(state == "true") this.config.state = true;
+	else this.config.state = false;
+};
+UTILS.checkPos = function(pos)
+{
+	if(!isNan(this.config.pos)) this.config.pos = parseInt(pos);
+};
+
 UTILS.defaultConf = function(config, more)
 {
 	if(!config) config = {};
