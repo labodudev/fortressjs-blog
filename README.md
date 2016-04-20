@@ -1,10 +1,8 @@
-# FortressJS
+[![FortressJS Logo](http://fortressjs.com/images/uploads/logo.png)](http://fortressjs.com/)
 Nodejs extremly fast, simple, modular and secure net and web framework
 
-	[![Linux Build][travis-image]][travis-url]
-	[![Windows Build][appveyor-image]][appveyor-url]
 
-[![Build Status](https://travis-ci.org/seraum/fortressjs.svg?branch=master)](https://travis-ci.org/seraum/fortressjs)  [![Build status](https://ci.appveyor.com/api/projects/status/m5x5mm4kbvbd2x8v?svg=true)](https://ci.appveyor.com/project/adrien-thierry/fortressjs) 
+[![Build Status](https://img.shields.io/travis/seraum/fortressjs/master.svg?label=Linux)](https://travis-ci.org/seraum/fortressjs)  [![Build status](https://img.shields.io/appveyor/ci/adrien-thierry/fortressjs/master.svg?label=Windows)](https://ci.appveyor.com/project/adrien-thierry/fortressjs) 
 
 More info about us : http://fortressjs.com and http://seraum.com
 
