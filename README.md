@@ -2,10 +2,11 @@
 
 Nodejs extremly fast, simple, modular and secure net and web framework
 
-
+[![Node Status](https://img.shields.io/badge/NodeJS-0.10%20&%20%3E-green.svg)](https://travis-ci.org/seraum/fortressjs)
 [![Build Status](https://img.shields.io/travis/seraum/fortressjs/master.svg?label=Linux)](https://travis-ci.org/seraum/fortressjs)
 [![Build status](https://img.shields.io/appveyor/ci/adrien-thierry/fortressjs/master.svg?label=Windows)](https://ci.appveyor.com/project/adrien-thierry/fortressjs) 
 [![Codeship Status for seraum/fortressjs](https://codeship.com/projects/d68c9340-e907-0133-4de9-226489e381a7/status?branch=master)](https://codeship.com/projects/147395)
+[![License Status](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/seraum/fortressjs)
 
 [![NPM](https://nodei.co/npm/fortressjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/fortressjs/)
 
