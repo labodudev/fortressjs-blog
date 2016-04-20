@@ -7,6 +7,7 @@ if(cluster.isMaster)
   // CHANGE ONLY IF YOU KNOW WHAT YOU DO
   wf.Load.Base("conf", wf.CONF['MAIN_PATH']);
   wf.Load.Base("proto");
+  wf.Load.Base("builder");
   wf.Load.Base("essential");
   wf.Load.Base("core");
   wf.Load.Base("util");
@@ -26,6 +27,7 @@ else
 	// CHANGE ONLY IF YOU KNOW WHAT YOU DO
 	wf.Load.Base("conf", wf.CONF['MAIN_PATH']);
 	wf.Load.Base("proto");
+	wf.Load.Base("builder");
 	wf.Load.Base("essential");
 	wf.Load.Base("core");
 	wf.Load.Base("util");
