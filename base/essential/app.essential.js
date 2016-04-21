@@ -9,72 +9,25 @@ module.exports.LoadHooks = LoadHooks;
 module.exports.LoadEngines = LoadEngines;
 module.exports.LoadModels = LoadModels;
 
-global.next = function(req, res){ UTILS.LoopExec(req, res);};
-
 var wf = WF();
 
-function App(_path, _name)
+global.next = function(req, res){ UTILS.LoopExec(req, res);};
+
+function LoadModels()
 {
-	/* CONSTRUCTOR 	*/
-	this.path = _path + _name + "/";
-	this.name = _name;
-	this.view = {};
-	/*				*/
-	this.checkApp = function()
-	{
-		var file = this.path + this.name + wf.CONF.APP_END;
-		if(fs.existsSync(file))
-		{
-			this.appState = true;
-			this.app = file;
-		}
-		else this.appState = false;
-	};
-	this.loadViews = function()
-	{
-		var v = this.path + this.conf.config.view + "/";
-		if(fs.existsSync(v) && fs.lstatSync(v).isDirectory())
-		{
-			var dArr = fs.readdirSync(v);
-			var darrL = dArr.length;
-			for(var d = 0; d < darrL; d++)
-			{
-				if(dArr[d].endsWith(wf.CONF.VIEW_END))
-				{
-					var ind = dArr[d].replace(wf.CONF.VIEW_END, "");
-					this.view[ind] = fs.readFileSync(v + dArr[d]);
-				}
-			} 
-		}
-	};
-	this.checkApp();
-	this.conf = new AppConf(_path, _name);
-	this.loadViews();
+	wf.parseServersAndHosts(cbModels);
 }
 
-function AppConf(_path, _name)
+function LoadApps()
 {
-	this.path = _path;
-	this.name = _name;
-	this.config = { "state" : true, "pos" : 0, "view": "view", "version": "0.0" };
-	this.readConf = function()
-	{
-		var file = this.path + "/" + this.name + "/" + this.name + wf.CONF.CONFIG_END;
-		if(fs.existsSync(file))
-		{
-			try
-			{
-				this.config = require(file);
-				UTILS.defaultConf(this.config);
-			}
-			catch(e)
-			{
-				console.log("[!] Error conf : " + file);
-			}
-		}
-	};
-	this.readConf();
+	wf.parseServers(cbApps);	
 }
+
+function LoadHooks()
+{
+	wf.parseServersAndHosts(cbHooks);
+}
+
 
 function getAppArray(p)
 {
@@ -83,21 +36,59 @@ function getAppArray(p)
 	if(fs.existsSync(c) && fs.lstatSync(c).isDirectory())
 	{
 		var dArr = fs.readdirSync(c);
-		dArr.forEach(function(d)
+		for(var d in dArr)
 		{
 			if (fs.lstatSync(c +'/' + d).isDirectory() && d != "." && d != "..")
 			{
-				var app = new App(c, d);
+				var app = new wf.Class.App(c, d);
 				if(app.appState && app.conf.config.state)
 				{
 					app.conf.config.place = p;
 					aArr.push(app);
 				}
 			}
-		});
+		};
 		aArr.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
 	}
 	return aArr;
+}
+
+function addEngine(tmpDir, tmpArray, result)
+{
+	var confModule = new wf.Class.App(tmpDir, tmpArray);
+	if(confModule.appState && confModule.conf.config.state)
+	{
+		var newModule = {};
+		try 
+		{
+			var loadedModule = require(tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);
+			if(loadedModule && typeof loadedModule == "function")
+			{
+				newModule = new loadedModule(confModule);
+				if(newModule.code !== undefined && typeof newModule.code === "function") newModule.execute = true;
+			}
+		}
+		catch(e){console.log("Error in Engine : " + tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);}
+		result.push({'path': tmpDir, 'name': confModule.name, 'conf': confModule.conf, 'place': tmpArray, 'exec': newModule, 'view': confModule.view });
+	}
+}
+
+function parseEngines(pDir, dir)
+{
+	wf.ENGINES[dir] = {};
+	var result = [];
+	var tmpDir = pDir + dir + "/";
+	var tmpArray = fs.readdirSync(tmpDir);
+	for(var m = 0; m < tmpArray.length; m++)
+	{
+		addEngine(tmpDir, tmpArray[m], result);
+	}
+	result.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
+	for(var i = 0; i < result.length; i++)
+	{
+		
+		if(result[i] !== undefined)  wf.ENGINES[dir][result[i].name] = result[i];
+	}
 }
 	
 function LoadEngines()
@@ -109,147 +100,122 @@ function LoadEngines()
 		var pArr = fs.readdirSync(pDir);
 		for(var p = 0; p < pArr.length; p++)
 		{
-			wf.ENGINES[pArr[p]] = {};
-			var result = [];
-			var tmpDir = pDir + pArr[p] + "/";
-			var tmpArray = fs.readdirSync(tmpDir);
-			for(var m = 0; m < tmpArray.length; m++)
-			{
-				var confModule = new App(tmpDir, tmpArray[m]);
-				if(confModule.appState && confModule.conf.config.state)
-				{
-					var newModule = {};
-					try 
-					{
-						var loadedModule = require(tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);
-						if(loadedModule && typeof loadedModule == "function")
-						{
-							newModule = new loadedModule(confModule);
-							if(newModule.code !== undefined && typeof newModule.code === "function") newModule.execute = true;
-						}
-					}
-					catch(e){console.log("Error in Engine : " + tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);}
-					result.push({'path': tmpDir, 'name': confModule.name, 'conf': confModule.conf, 'place': pArr[p], 'exec': newModule, 'view': confModule.view });
-				}
-			}
-			result.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
-			for(var i = 0; i < result.length; i++)
-			{
-				if(result[i] !== undefined)  wf.ENGINES[pArr[p]][result[i].name] = result[i];
-			}
+			parseEngines(pDir, pArr[p]);
 		}
 	}
 }
 
-function LoadApps()
+function parseApp(srv, appPath, root, current)
 {
-	wf.parseServers(cbApps);	
+	var confModule = new wf.Class.App(root, current);
+	if(confModule.appState && confModule.conf.config.state)
+	{
+		var newModule = {};
+		try
+		{
+			var loadedModule = require(root + confModule.name + "/" + confModule.name + wf.CONF.APP_END);
+			if(loadedModule && typeof loadedModule == "function")
+			{
+				newModule = new loadedModule(confModule);
+				if(newModule.code !== undefined && typeof newModule.code === "function") newModule.execute = true;
+			}
+		}
+		catch(e) { console.log("Error in App : " +  root + confModule.name + "/" + confModule.name + wf.CONF.APP_END);}
+		wf.SERVERS[srv].APPS[appPath].push(
+		{
+		'	path': root, 'name': confModule.name, 'conf': confModule.conf, 'place': appPath, 'exec': newModule, 'view': confModule.view,
+		});
+	}
+}
+
+function parseAppContainer(srv, rootPath, appPath)
+{
+	wf.SERVERS[srv].APPS[appPath] = [];
+	var tmpDir = rootPath + appPath + "/";
+	if(fs.lstatSync(tmpDir).isDirectory())
+	{
+		var tmpArray = fs.readdirSync(tmpDir);
+		for(var m = 0; m < tmpArray.length; m++)
+		{
+			parseApp(srv, appPath, tmpDir, tmpArray[m]);
+		}
+		wf.SERVERS[srv].APPS[appPath].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
+		var result = wf.SERVERS[srv].APPS[appPath];
+		wf.SERVERS[srv].APPS[appPath] = result;
+	}
 }
 
 function cbApps(s)
 {
-	var pDir = wf.CONF.SRV_PATH + s + '/' + wf.CONF.APP_FOLDER;
+	var rootPath = wf.CONF.SRV_PATH + s + '/' + wf.CONF.APP_FOLDER;
 	wf.SERVERS[s].APPS = {};
-	if(fs.existsSync(pDir) && fs.lstatSync(pDir).isDirectory())
+	if(fs.existsSync(rootPath) && fs.lstatSync(rootPath).isDirectory())
 	{
-		var pArr = fs.readdirSync(pDir);
-		var pArrL = pArr.length;
-		for(var p = 0; p < pArrL; p++)
+		var appPath = fs.readdirSync(rootPath);
+		for(var p = 0; p < appPath.length; p++)
 		{
-			wf.SERVERS[s].APPS[pArr[p]] = [];
-			var tmpDir = pDir + pArr[p] + "/";
-			if(fs.lstatSync(tmpDir).isDirectory())
+			parseAppContainer(s, rootPath, appPath[p]);
+		}
+	}
+}
+
+function parseHook(root, current)
+{
+	if (fs.lstatSync(root +'/' + current).isDirectory() && current != "." && current != "..")
+	{
+		var app = new wf.Class.App(root, current);
+		if(app.appState && app.conf.config.state && app.conf.config.hook !== undefined)
+		{
+			var newModule = {};
+			try
 			{
-				var tmpArray = fs.readdirSync(tmpDir);
-				var tL = tmpArray.length;
-				for(var m = 0; m < tL; m++)
+				var loadedModule = require(tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);
+				if(loadedModule && typeof loadedModule == "function")
 				{
-					var confModule = new App(tmpDir, tmpArray[m]);
-					if(confModule.appState && confModule.conf.config.state)
+					newModule = new loadedModule(app);
+					if(newModule.code !== undefined && typeof newModule.code === "function") newModule.execute = true;
+					if(newModule.runOnce && process.env.wrkId && process.env.wrkId === 0) newModule.runOnce();
+					newModule.getView = function(v)
 					{
-						var newModule = {};
-						try
+						if(app.view[v] !== undefined)
 						{
-							var loadedModule = require(tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);
-							if(loadedModule && typeof loadedModule == "function")
-							{
-								newModule = new loadedModule(confModule);
-								if(newModule.code !== undefined && typeof newModule.code === "function") newModule.execute = true;
-							}
+							return app.view[v];
 						}
-						catch(e) { console.log("Error in App : " +  tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);}
-						wf.SERVERS[s].APPS[pArr[p]].push(
-						{
-						'	path': tmpDir, 'name': confModule.name, 'conf': confModule.conf, 'place': pArr[p], 'exec': newModule, 'view': confModule.view,
-						});
-					}
+					};
 				}
-				wf.SERVERS[s].APPS[pArr[p]].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
-				var result = wf.SERVERS[s].APPS[pArr[p]];
-				wf.SERVERS[s].APPS[pArr[p]] = result;
 			}
+			catch(e){ console.log("Error in Hooks : " +  tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END); }
+			if(hookArr[app.conf.config.hook] === undefined) hookArr[app.conf.config.hook] = [];
+			hookArr[app.conf.config.hook].push({'name': app.name, 'hooked': true, 'conf': app.conf, 'exec': newModule, 'view': app.view });
 		}
 	}
 }
 
 function cbHooks(s,h)
 {
-	var hArr = {};
+	var hookArr = {};
 	wf.SERVERS[s].HOSTS[h].HOOKS = {};
-	var p = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF.PLUGIN_FOLDER;
-	if(fs.existsSync(p) && fs.lstatSync(p).isDirectory())
+	var root = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF.PLUGIN_FOLDER;
+	if(fs.existsSync(root) && fs.lstatSync(root).isDirectory())
 	{
-		var dArr = fs.readdirSync(p);
-		for(var d in dArr)
+		var current = fs.readdirSync(root);
+		for(var c in current)
 		{
-			if (fs.lstatSync(p +'/' + d).isDirectory() && d != "." && d != "..")
-			{
-				var app = new App(p, d);
-				if(app.appState && app.conf.config.state && app.conf.config.hook !== undefined)
-				{
-					var newModule = {};
-					try
-					{
-						var loadedModule = require(tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);
-						if(loadedModule && typeof loadedModule == "function")
-						{
-							newModule = new loadedModule(app);
-							if(newModule.code !== undefined && typeof newModule.code === "function") newModule.execute = true;
-							if(newModule.runOnce && process.env.wrkId && process.env.wrkId === 0) newModule.runOnce();
-							newModule.getView = function(v)
-							{
-								if(app.view[v] !== undefined)
-								{
-									return app.view[v];
-								}
-							};
-						}
-					}
-					catch(e){ console.log("Error in Hooks : " +  tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END); }
-					// LOAD IN ARRAY
-					if(hArr[app.conf.config.hook] === undefined) hArr[app.conf.config.hook] = [];
-					hArr[app.conf.config.hook].push({'name': app.name, 'hooked': true, 'conf': app.conf, 'exec': newModule, 'view': app.view });
-				}
-			}
+			parseHook(root, current[c]);
 		}
-		for(var o in hArr)
+		for(var o in hookArr)
 		{
-			hArr[o].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
-			wf.SERVERS[s].HOSTS[h].HOOKS[o] = hArr[o];
+			hookArr[o].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
+			wf.SERVERS[s].HOSTS[h].HOOKS[o] = hookArr[o];
 		}
 	}
-}
-
-function LoadHooks()
-{
-	wf.parseServersAndHosts(cbHooks);
 }
 
 function cbModels(s, h)
 {
 	wf.SERVERS[s].HOSTS[h].MODELS = {};
-	var p = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF.MODEL_FOLDER;
-	var mArr = wf.Load.loadFiles(wf.CONF.MODEL_END, p, true);
+	var currentPath = wf.SERVERS[s].HOSTS[h].path + wf.SERVERS[s].HOSTS[h].name + "/" + wf.CONF.MODEL_FOLDER;
+	var mArr = wf.Load.loadFiles(wf.CONF.MODEL_END, currentPath, true);
 	if(mArr && mArr !== null)
 	{
 		var j = mArr.length;
@@ -258,17 +224,12 @@ function cbModels(s, h)
 			var name = mArr[i].split(wf.CONF.MODEL_END)[0]; 
 			try
 			{
-				wf.SERVERS[s].HOSTS[h].MODELS[name] = require(p + mArr[i]);
+				wf.SERVERS[s].HOSTS[h].MODELS[name] = require(currentPath + mArr[i]);
 			}
 			catch(e)
 			{
-				console.log("[!] Error conf : " + p + mArr[i]);
+				console.log("[!] Error conf : " + currentPath + mArr[i]);
 			}
 		}
 	}
-}
-
-function LoadModels()
-{
-	wf.parseServersAndHosts(cbModels);
 }

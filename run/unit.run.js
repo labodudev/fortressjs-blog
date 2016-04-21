@@ -15,6 +15,7 @@ require('../start/load.start.js');
 wf.Load.Base("conf", wf.CONF['MAIN_PATH']);
 // LOAD TEST 
 wf.Load.Base("proto");
+wf.Load.Base("class");
 wf.Load.Base("builder");
 wf.Load.Base("essential");
 wf.Load.Base("core");
