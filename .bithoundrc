@@ -1,0 +1,6 @@
+"ignore": [
+	"**/jail/js-files/**",
+	"**.conf.js",
+	"**.test.js",
+	"**/run/**"
+  ]

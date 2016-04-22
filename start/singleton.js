@@ -11,7 +11,7 @@ var singleton = function singleton()
 		  delete this[i];
 		}
   }
-}
+};
 
 // GET SINGLETON CALLER
 function getCaller()
@@ -22,7 +22,10 @@ function getCaller()
     var callerfile;
     var currentfile;
 
-    Error.prepareStackTrace = function (err, stack) { return stack; };
+    Error.prepareStackTrace = function (err, stack) 
+	{ 
+		return stack; 
+	};
 
     currentfile = err.stack.shift().getFileName();
 
@@ -40,10 +43,10 @@ function getCaller()
 var getInstance = function()
 {
     var caller = getCaller();
-    if(caller !== undefined && single !== undefined && caller.indexOf(single.CONF['HOST_FOLDER']) > -1)
+    if(caller !== undefined && single !== undefined && caller.indexOf(single.CONF.HOST_FOLDER) > -1)
     {
-      var srv = caller.split(single.CONF['SRV_FOLDER'])[1].split('/')[0];
-      var host = caller.split(single.CONF['HOST_FOLDER'])[1].split('/')[0];
+      var srv = caller.split(single.CONF.SRV_FOLDER)[1].split('/')[0];
+      var host = caller.split(single.CONF.HOST_FOLDER)[1].split('/')[0];
 	  var result = {};
 	  if(single.SERVERS[srv])
 	  {

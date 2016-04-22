@@ -1,4 +1,10 @@
-module.exports.Class = { App:App, AppConf: AppConf };
+/*
+
+Copyright (C) 2016  Adrien THIERRY
+http://seraum.com 
+
+*/
+module.exports.AppClass = { App:App, AppConf: AppConf };
 
 var wf = WF();
 

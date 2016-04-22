@@ -6,6 +6,7 @@ http://seraum.com
 */
 module.exports.parseServers = parseServers;
 module.exports.parseServersAndHosts = parseServersAndHosts;
+module.exports.parseServersAndHostsAndZones = parseServersAndHostsAndZones;
 
 var wf = WF();
 
@@ -41,4 +42,21 @@ function parseServersAndHosts(cb)
       }
     }
   }
+}
+
+function parseServersAndHostsAndZones(cb)
+{
+	for(var srv in wf.SERVERS)
+	{
+		for(var host in wf.SERVERS[srv].HOSTS)
+		{
+			if(wf.SERVERS[srv].HOSTS[host] !== undefined && wf.SERVERS[srv].HOSTS[host].ZONES !== undefined)
+			{
+				for(var zone in wf.SERVERS[srv].HOSTS[host].ZONES)
+				{
+					cb(srv, host, zone);
+				}
+			}
+		}
+	}
 }

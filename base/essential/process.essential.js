@@ -7,95 +7,35 @@ http://seraum.com
 module.exports.LoadProcess = LoadProcess;
 var wf = WF();
 
-function Process(_path, _name)
-{
-	this.path = _path + _name + "/";
-	this.name = _name;
-
-	this.checkProcess = function()
-	{
-		this.process = this.path + this.name + wf.CONF['PROCESS_END'];
-		var file = this.path + this.name + wf.CONF['CONFIG_END'];
-		if(fs.existsSync(file))
-		{
-			this.processState = true;
-			this.conf = new ProcessConf(_path, _name);
-		}
-		else this.processState = false;
-	}
-
-	/* FONCTION DECLARATIONS */
-	this.checkProcess();
-	this.conf = new ProcessConf(_path, _name);
-	/*************************/
-}
-
-function ProcessConf(_path, _name)
-{
-	this.path = _path + _name + "/";
-	this.name = _name;
-	this.config = { "state": true, "pos": 100, restart: 'none', 'attempt': 5, 'delay': 3000, 'started': 10000, 'wait': false, cmd:'', args: [], options: {} };
-
-	this.readConf = function()
-	{
-		var file = this.path + this.name + wf.CONF['CONFIG_END'];
-		if(fs.existsSync(file))
-		{
-			try
-			{
-			  this.config = require(file);
-			  UTILS.defaultConf(this.config);
-			}
-			catch(e)
-			{
-			  console.log("[!] Error process conf : " + file);
-			}
-		}
-	}
-	this.checkState = function(state)
-	{
-		if(state == "true") this.config['state'] = true;
-		else this.config['state'] = false;
-	}
-	this.checkPos = function(pos)
-	{
-		if(!isNan(this.config['pos'])) this.config['pos'] = parseInt(pos);
-	}
-
-	/* FONCTION DECLARATIONS */
-	this.readConf();
-	/*************************/
-}
-
 function LoadProcess()
 {
 	wf.PROCESS = {};
-  var sArr = [];
-  var c = wf.CONF['PROCESS_PATH'];
-  if(fs.existsSync(c) && fs.lstatSync(c).isDirectory())
-  {
-    var dArr = fs.readdirSync(c);
-    dArr.forEach(function(d)
-	 {
-	   if (fs.lstatSync(c +'/' + d).isDirectory() && d != "." && d != "..")
-	   {
-		 var proc = new Process(c, d);
-		 if(proc.processState && proc.conf.config['state'])
-		 {
-			 sArr.push(proc);
-		 }
-	   }
-	 });
-    sArr.sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
-  }
+	var sArr = [];
+	var c = wf.CONF['PROCESS_PATH'];
+	if(fs.existsSync(c) && fs.lstatSync(c).isDirectory())
+	{
+		var dArr = fs.readdirSync(c);
+		for(var d in dArr);
+		{
+			if (fs.lstatSync(c +'/' + dArr[d]).isDirectory() && dArr[d] != "." && dArr[d] != "..")
+			{
+				var proc = new wf.ProcessClass.Process(c, dArr[d]);
+				if(proc.processState && proc.conf.config['state'])
+				{
+					sArr.push(proc);
+				}
+			}
+		};
+		sArr.sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+	}
 
 	wf.PROCESS = sArr;
-  var sL = sArr.length;
-  for( var i = 0; i < sL; i++)
-  {
-	  var wait = sanitInt(sArr[i].conf.config.wait, false);
-	  manageProcess(sArr[i], wait);
-  }
+	var sL = sArr.length;
+	for( var i = 0; i < sL; i++)
+	{
+		var wait = sanitInt(sArr[i].conf.config.wait, false);
+		manageProcess(sArr[i], wait);
+	}
 }
 
 function manageProcess(proc, wait)
