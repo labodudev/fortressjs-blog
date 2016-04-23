@@ -58,7 +58,7 @@ var securify = function()
 };
 var Open = function(srv)
 {
-    if(wf.SERVERS[srv].state !== undefined && (wf.SERVERS[srv].state === 1 || wf.SERVERS[srv].state == true))
+    if(wf.SERVERS[srv].state !== undefined && (wf.SERVERS[srv].state === 1 || wf.SERVERS[srv].state === true))
     {
         if(wf.AppServer[wf.SERVERS[srv].type])
         {
@@ -119,7 +119,7 @@ function LoopExec(req, res)
     if(req.continue)
     {
         wf.Launch(req, res);
-        req.loop++
+        req.loop++;
     }
     else break;
   }

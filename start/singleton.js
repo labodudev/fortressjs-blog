@@ -15,6 +15,7 @@ var singleton = function singleton()
 
 function getErrorStack(err, stack)
 {
+	if(err) wf.Log(err);
 	return stack; 
 }
 

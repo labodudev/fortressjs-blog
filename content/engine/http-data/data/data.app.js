@@ -49,7 +49,7 @@ function dataEngine()
 	
 	this.code = function(req, res)
 	{
-		var cbDestroy = function(err)
+		var cbDestroy = function()
 		{
 			 req.destroy();
 		};
