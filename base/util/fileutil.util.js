@@ -33,7 +33,7 @@ var rmdir = function(dir, cb2)
             i++;
             if(i < j)
             {
-                recRm(from, i, j, list, cb)
+                recRm(from, i, j, list, cb);
             }
             else
             {
@@ -61,10 +61,7 @@ var rmdir = function(dir, cb2)
             {   
                 if(filename)
                 {
-                    rmdir(filename, function()
-                    {
-                        nextFile();
-                    });
+                    rmdir(filename, nextFile);
                 }
                 else
                 {
@@ -73,15 +70,11 @@ var rmdir = function(dir, cb2)
             } 
             else 
             {
-                fs.unlink(filename, function(err)
-                {
-                    nextFile();
-                });
+                fs.unlink(filename, nextFile);
             }
         });
     }    
 };
 
 fileUtil.rmdir = rmdir;
-
 module.exports.fileUtil = fileUtil;

@@ -43,7 +43,7 @@ function Srv()
 
 var securify = function()
 {
-     if (wf.CONF.CHANGE_ID !== undefined && wf.CONF.CHANGE_ID == true && process.getuid && process.setuid)
+     if (wf.CONF.CHANGE_ID !== undefined && wf.CONF.CHANGE_ID === true && process.getuid && process.setuid)
     {
         try
         {
@@ -58,7 +58,7 @@ var securify = function()
 };
 var Open = function(srv)
 {
-    if(wf.SERVERS[srv].state !== undefined && (wf.SERVERS[srv].state == 1 || wf.SERVERS[srv].state == true))
+    if(wf.SERVERS[srv].state !== undefined && (wf.SERVERS[srv].state === 1 || wf.SERVERS[srv].state == true))
     {
         if(wf.AppServer[wf.SERVERS[srv].type])
         {
@@ -77,7 +77,7 @@ var Open = function(srv)
       {
         this.deleteSrv(s);
       }
-  }
+  };
 
   this.deleteSrv = function(id)
   {
@@ -104,29 +104,9 @@ var Open = function(srv)
       {
         wf.SERVERS[srv].CLIENTS[client].destroy();
       }
-      delete wf.SERVERS[srv].CLIENTS[client]
+      delete wf.SERVERS[srv].CLIENTS[client];
     }
   };
-
-	function getSrvArray(p)
-	{
-		var sArr = [];
-		var end = wf.CONF.APP_END;
-		var c = wf.CONF.APP_PATH + p;
-		if(fs.existsSync(c) && fs.lstatSync(c).isDirectory())
-		{
-			var dArr = fs.readdirSync(c);
-			dArr.forEach(function(d)
-			{
-				if (fs.lstatSync(c +'/' + d).isDirectory() && d != "." && d != "..")
-				{
-					var app = new App(c, d);
-					if(app.appState && app.conf.config.state) { aArr.push(app); }
-				}
-			});
-		}
-		return aArr;
-	}
 }
 
 function LoopExec(req, res)

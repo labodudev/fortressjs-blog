@@ -46,20 +46,17 @@ function dataEngine()
 			 res.destroy();
 		}
 	}
-
+	
 	this.code = function(req, res)
 	{
+		var cbDestroy = function(err)
+		{
+			 req.destroy();
+		}
         req.postData = "";
         
-        req.on("error", function(err)
-        {
-            req.destroy();
-        });
-
-        req.on("clientError", function(err)
-        {
-            req.destroy();
-        });
+        req.on("error", cbDestroy);
+        req.on("clientError",  cbDestroy);
         
         if(req.method != "POST" && req.method != "PUT") 
         {
