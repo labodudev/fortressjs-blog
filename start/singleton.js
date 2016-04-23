@@ -13,6 +13,11 @@ var singleton = function singleton()
   }
 };
 
+function getErrorStack(err, stack)
+{
+	return stack; 
+}
+
 // GET SINGLETON CALLER
 function getCaller()
 {
@@ -22,10 +27,7 @@ function getCaller()
     var callerfile;
     var currentfile;
 
-    Error.prepareStackTrace = function (err, stack) 
-	{ 
-		return stack; 
-	};
+    Error.prepareStackTrace = getErrorStack;
 
     currentfile = err.stack.shift().getFileName();
 

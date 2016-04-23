@@ -20,7 +20,7 @@ function dataEngine()
 			}
 			else
 			{
-				 req.on("data", function(d)
+				req.on("data", function(d)
 				{                         
 					try
 					{
@@ -52,9 +52,8 @@ function dataEngine()
 		var cbDestroy = function(err)
 		{
 			 req.destroy();
-		}
+		};
         req.postData = "";
-        
         req.on("error", cbDestroy);
         req.on("clientError",  cbDestroy);
         
