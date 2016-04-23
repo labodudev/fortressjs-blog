@@ -18,6 +18,7 @@ function cacheApp()
             }
         }
 		
+		
 		function cbCache(srv, host, zone)
 		{
 			if(wf.SERVERS[srv].HOSTS[host].ZONES[zone].conf.shared !== undefined && wf.SERVERS[srv].HOSTS[host].ZONES[zone].conf.cache !== undefined)
@@ -26,7 +27,7 @@ function cacheApp()
 				{
 					var tmp = wf.SERVERS[srv].HOSTS[host].ZONES[zone].shared[folder];
 					
-					var cbStat = function(err, stat)
+					function cbStat(err, stat)
 					{
 						if(err || !stat.isFile())
 						{

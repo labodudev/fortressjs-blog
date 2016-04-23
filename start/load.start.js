@@ -142,7 +142,7 @@ function wfLoader()
 		return fs.statSync(wf.CONF.BASE_PATH + path + '/' + file).isDirectory();
 	  });
 	}
-};
+}
 
 function getNodeVersion()
 {
