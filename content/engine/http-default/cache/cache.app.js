@@ -47,7 +47,7 @@ function cacheApp()
 							}
 							catch(e){}
 						}
-					};
+					}
 					
 					fs.stat(tmp.path, cbStat);
 				}
