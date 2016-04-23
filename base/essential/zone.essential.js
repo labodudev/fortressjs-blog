@@ -132,11 +132,6 @@ function ZoneConf(_path, _name)
 			}
 		}
 	};
-	this.checkState = function(state)
-	{
-		if(state == "true") this.config.state = true;
-		else this.config['state'] = false;
-	}
 
 	/* FONCTION DECLARATIONS */
 	this.readConf();
@@ -171,7 +166,7 @@ function cbZones(s, h)
 		for(var d in hArr)
 		{
 			var zTmp = new Zone(zDir, hArr[d]);
-			if(zTmp.zoneState && zTmp.conf.config['state'])
+			if(zTmp.zoneState && zTmp.conf.config.state)
 			{
 			wf.SERVERS[s].HOSTS[h].ZONES[zTmp.conf.config.uri] = {'path': zDir, 'name': zTmp.name, 'conf': zTmp.conf.config, "shared": zTmp.shared };
 			}
