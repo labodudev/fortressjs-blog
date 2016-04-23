@@ -16,7 +16,7 @@ function MasterService()
 			wf.Service.loadAll();
 			wf.Service.startSrv();
 		}
-	}
+	};
 
 	this.checkArgs = function()
 	{
@@ -26,47 +26,58 @@ function MasterService()
 			wf.CLI.check();
 		return false;*/
         return true;
-	}
+	};
 
 	this.loadAll = function()
     {
         // LOAD SLAVES SERVICES
         wf.LoadProcess();
         wf.LoadServer();
-  }
+  };
 
+  
+	function launchSrvWithSrvId(srvId)
+	{
+		try
+		{
+			var nbrThread = wf.SERVERS[srvId].thread;
+			if(nbrThread === undefined || nbrThread < 1)
+			  nbrThread = 1;
+			for(var i = 0; i < nbrThread; i++)
+			{
+				wf.Cluster.createWorker( srvId, i );
+			}
+		}
+		catch(e){}
+	}
+	
+	function launchSrvWithoutSrvId()
+	{
+		for(var srv in wf.SERVERS)
+		{
+			var nbrThread = wf.SERVERS[srv].thread;
+			if(nbrThread === undefined || nbrThread < 1)
+			  nbrThread = 1;
+			for(var i = 0; i < nbrThread; i++)
+			{
+				wf.Cluster.createWorker( srv, i );
+			}
+		}
+	}
+	
     // CREER UN OBJET WORKERS AVEC EN INDICE SON ID ET SON SRVID POUR LE RELANCER
     this.startSrv = function(srvId)
     {
 
         if(!srvId)
         {
-            for(var s in wf.SERVERS)
-            {
-                var nbrThread = wf.SERVERS[s].thread;
-                if(nbrThread === undefined || nbrThread < 1)
-                  nbrThread = 1;
-                for(var i = 0; i < nbrThread; i++)
-                {
-                    wf.Cluster.createWorker( s, i );
-                }
-            }
+            launchSrvWithoutSrvId();
         }
         else
         {
-            try
-            {
-                var nbrThread = wf.SERVERS[srvId].thread;
-                if(nbrThread === undefined || nbrThread < 1)
-                  nbrThread = 1;
-                for(var i = 0; i < nbrThread; i++)
-                {
-                    wf.Cluster.createWorker( srvId, i );
-                }
-            }
-            catch(e){}
+            launchSrvWithSrvId(srvId);
         }
-    }
+    };
 
     // RELOAD ALL SRV
     this.reloadAllSrv = function(msg)
@@ -74,7 +85,7 @@ function MasterService()
         wf.Log("[!] Reloading all servers");
         wf.Service.loadAll();
         this.relayWorker({action: 'reloadAllSrv'});
-    }
+    };
 
     this.reloadSrv = function(msg)
     {
@@ -85,7 +96,7 @@ function MasterService()
             //wf.SERVERS[msg.srvId].state = true;
             //wf.Service.startSrv(msg.srvId);
         }
-        else if(wf.SERVERS[msg.srvId].state == false)
+        else if(wf.SERVERS[msg.srvId].state === false)
         {
             wf.SERVERS[msg.srvId].state = true;
             var cb = function() { wf.Service.startSrv(msg.srvId); };
@@ -95,7 +106,7 @@ function MasterService()
         {
             this.relayWorker({action: 'reloadAllSrv', srvId: msg.srvId, restrict: true});
         }
-    }
+    };
     
     this.stopSrv = function(msg)
     {
@@ -114,35 +125,35 @@ function MasterService()
         {
             wf.SERVERS[msg.srvId].state = false;
         }
-    }
+    };
 
     // STOP MASTER FOR RESTART
     this.restartWF = function(msg)
     {
         process.exit();
-    }
+    };
     
     this.dump = function(msg)
     {
         wf.Dump(msg);
-    }
+    };
     
     // RELAY MSG TO WROKERS
     this.relayWorker = function(msg)
     {
         msg.cmd = msg.action;
         wf.Message.sendAll(msg);
-    }
+    };
 
     this.haltSystem = function(msg)
     {
-        exec(wf.CONF.SYSTEM["HALT_CMD"]);
-    }
+        exec(wf.CONF.SYSTEM.HALT_CMD);
+    };
 
     this.rebootSystem = function(msg)
     {
-        exec(wf.CONF.SYSTEM["REBOOT_CMD"]);
-    }
+        exec(wf.CONF.SYSTEM.REBOOT_CMD);
+    };
 
     this.deploy = function(msg)
     {
@@ -150,7 +161,7 @@ function MasterService()
         {
             wf.Deploy[msg.action](msg.param);
         }
-    }
+    };
     
     this.execChrootedDaemon = function(msg)
     {
@@ -164,5 +175,5 @@ function MasterService()
                 return;
             });
         }
-    }
+    };
 }
