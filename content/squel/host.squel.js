@@ -7,7 +7,6 @@ var hostConf=
     { 
         "127.0.0.1": "localhost",
     },
-
     "app": {},
-}
-module.exports.hostConf = hostConf;
+};
+module.exports = hostConf;

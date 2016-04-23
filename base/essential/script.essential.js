@@ -33,7 +33,7 @@ function LoadScripts()
 				}
 			}
 		}
-		sArr.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos});
+		sArr.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
 	}
 	wf.SCRIPT = sArr;
 }

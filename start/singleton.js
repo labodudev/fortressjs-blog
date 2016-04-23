@@ -63,6 +63,6 @@ var getInstance = function()
         single = new singleton();
     }
     return single;
-}
+};
 
 module.exports = getInstance;

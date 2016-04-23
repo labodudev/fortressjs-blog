@@ -4,51 +4,22 @@ function account(empty)
 {
 	this.collection = "account";
 	this.rest = true;
-	this.PUT = true;
-    this.GET = true;
-	this.POST = false;
-	this.DELETE = false;
 
-	
 	this.sanitize = 
 	{
-		_id: null,
-		password: null,
-	}
-    
+		_id: null, // Hide _id 
+		password: null, // Hide password
+	};
     
     this.access = function(req, res)
     {
         // ADD LOGIN SCHEMA HERE
-        if(req.userRight && req.apiUser)
-        {
-            if(req.post && req.post.query)
-                req.post.query.account_key = req.apiUser.account_key;
-            if(req.get)
-            {
-                req.get.query = {};
-                req.get.query.account_key = req.apiUser.account_key;
-            }
-            return true;
-        }
-        return false;
-    }
+		// return false OR true
+        return true;
+    };
 	
 	this.field =
 	{
-
-        storage:
-        {
-            private: true,  
-        },
-        bandwith:
-        {
-            private: true,
-        },
-        account_key:
-        {
-            
-        },
 		email:
 		{
 			unique: true,

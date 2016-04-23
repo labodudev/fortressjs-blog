@@ -4,10 +4,12 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.httpUtil = new httpUtil();
-UTILS.httpUtil = new httpUtil();
+module.exports.httpUtil = new httpUtil(http);
+module.exports.httpsUtil = new httpUtil(https);
+UTILS.httpUtil = new httpUtil(http);
+UTILS.httpUtil = new httpUtil(https);
 
-function httpUtil()
+function httpUtil(httpHandler)
 {
     this.getOption = function(str)
     {
@@ -20,13 +22,13 @@ function httpUtil()
                 result[tmp[0]] = tmp[1];
         }
         return result;
-    }
+    };
     
     this.httpGet = function(opt, cbError, cbOk, encoding)
     {
         if(!encoding) encoding = "utf8";
         opt.path = encodeURI(opt.path);
-        var get = http.request(opt);
+        var get = httpHandler.request(opt);
         get.on("error", function(err)
         {
             cbError(err);
@@ -46,12 +48,12 @@ function httpUtil()
         });
         get.end();
         return;
-    }
+    };
     
      this.httpGetPipe = function(opt, cbError,cbPipe, cbOk)
     {
         opt.path = encodeURI(opt.path);
-        var get = http.request(opt);
+        var get = httpHandler.request(opt);
         get.on("error", function(err)
         {
             cbError(err);
@@ -69,7 +71,7 @@ function httpUtil()
         });
         get.end();
         return;
-    }
+    };
      
     this.dataSuccess = function(req, res, message, data, version)
     {
@@ -86,7 +88,7 @@ function httpUtil()
             date: new Date(Date.now()),
         }
         res.end(JSON.stringify(result));
-     }
+     };
      
     this.dataError = function(req, res, status, message, code, version)
     {
@@ -103,6 +105,6 @@ function httpUtil()
             date: new Date(Date.now()),
         };
         res.end(JSON.stringify(result));
-     }
+     };
      
 }

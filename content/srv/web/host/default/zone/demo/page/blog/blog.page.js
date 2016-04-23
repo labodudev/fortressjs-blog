@@ -4,8 +4,6 @@ function blogPage()
 {
     this.code = function(req, res)
     {
-
-        res.end(this.view['blog']);
-
-    }
+        res.end(this.view.blog);
+    };
 }

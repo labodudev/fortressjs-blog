@@ -11,8 +11,7 @@ var wf = WF();
 
 function Log(str)
 {
-
-	if(wf.CONF.DEBUG == true)
+	if(wf.CONF.DEBUG === true)
 	{
 		console.log("[+] " + new Date() + " - " + str);
 	}
@@ -20,7 +19,7 @@ function Log(str)
 
 function Error(str)
 {
-	if(wf.CONF.ERROR == true)
+	if(wf.CONF.ERROR === true)
 	{
 		console.log("[!] " + new Date() + " - " + str);
 	}

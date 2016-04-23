@@ -13,7 +13,7 @@ UTILS.LoadMod = function(req, res, v)
     {
       res.tpl.inner += view[v];
     }
-}
+};
 UTILS.GetModView = function(req, res, v)
 {
     var view = req.HOST.ZONES[req.zone].MODS[req.modPath][req.mod].view;
@@ -21,7 +21,7 @@ UTILS.GetModView = function(req, res, v)
     {
       return view[v];
     }
-}
+};
 UTILS.EndMod = function(req, res, v)
 {
     if(req.HOST.ZONES[req.zone].MODS[req.modPath][req.mod].view[v] !== undefined)
@@ -29,5 +29,5 @@ UTILS.EndMod = function(req, res, v)
       res.end(req.HOST.ZONES[req.zone].MODS[req.modPath][req.mod].view[v]);
     }
     else res.end("Undefined view");
-}
+};
 /****************************************************************************/

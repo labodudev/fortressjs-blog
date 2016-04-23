@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.PageClass = {Page: Page, PageConf: PageConf}
+module.exports.PageClass = {Page: Page, PageConf: PageConf};
 var wf = WF();
 
 function Page(_path, _name)
@@ -24,7 +24,7 @@ function Page(_path, _name)
 			this.getPageModules();
 		}
 		else this.pageState = false;
-	}
+	};
 
 	this.loadViews = function()
 	{
@@ -42,7 +42,7 @@ function Page(_path, _name)
 				}
 			}
 		}
-	}
+	};
 
 	function getPageModulesArray(c, state)
 	{
@@ -56,7 +56,7 @@ function Page(_path, _name)
 				if (fs.lstatSync(c + '/' + dArr[d]).isDirectory())
 				{
 					var mod = new Module(c, dArr[d]);
-					if(mod.modState && state == false && mod.conf.config.state) {  mArr.push(mod); }
+					if(mod.modState && state === false && mod.conf.config.state) {  mArr.push(mod); }
 					else if(mod.modState && state) {  mArr.push(mod); }
 				}
 			}
@@ -72,7 +72,7 @@ function Page(_path, _name)
 		{
 			this.modules = getPageModulesArray(mPath, true);
 		}
-	}
+	};
 	
 	/* FONCTION DECLARATIONS */
 	this.checkPage();
@@ -102,19 +102,8 @@ function PageConf(_path, _name)
 			  console.log("[!] Error Page conf : " + file);
 			}
 		}
-	}
-        
-	this.checkState = function(state)
-	{
-		if(state == "true") this.config.state = true;
-		else this.config.state = false;
-	}
-    
-	this.checkPos = function(pos)
-	{
-		if(!isNan(this.config.pos)) this.config.pos = parseInt(pos);
-	}
-
+	};
+      
 	/* FONCTION DECLARATIONS */
 	this.readConf();
 	/*************************/

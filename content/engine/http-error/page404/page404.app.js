@@ -24,6 +24,5 @@ function send404()
             });
             res.end("<h1>404 ERROR</h1>");
         }
-    }
-    
+    };
 }

@@ -14,13 +14,13 @@ function Net(srv)
 		socket.id = socket.remoteAddress + "_" + socket.remotePort;
         socket.srv = srv;
         // DEFAUL HOST IS LOCAL BECAUSE OF PROTOCOL
-		if(wf.SERVERS[srv].HOSTS['local'])
+		if(wf.SERVERS[srv].HOSTS[wf.CONF.DEFAULT_NET])
 		{
-			socket.app = wf.SERVERS[srv].HOSTS['local'].appArray;
+			socket.app = wf.SERVERS[srv].HOSTS[wf.CONF.DEFAULT_NET].appArray;
 			// FORGE SERVERS
 			socket.SERVER = wf.SERVERS[srv];
 			// FORGE HOST
-			socket.HOST = socket.SERVER.HOSTS['local'];
+			socket.HOST = socket.SERVER.HOSTS[wf.CONF.DEFAULT_NET];
 			// Set CLIENTS
 			socket.SERVER.CLIENTS[socket.id] = socket;
 			// Set disconnect function

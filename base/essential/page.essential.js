@@ -27,7 +27,7 @@ function pushPages(srv, host, zone, directory, result)
 
 function cbPages(srv, host, zone)
 {
-	var pDir = wf.CONF['SRV_PATH'] + srv + "/" + wf.CONF['HOST_FOLDER'] + wf.SERVERS[srv].HOSTS[host].name + "/" + wf.CONF['ZONE_FOLDER'] + wf.SERVERS[srv].HOSTS[host].ZONES[zone].name + '/'  + wf.CONF['PAGE_FOLDER'];
+	var pDir = wf.CONF.SRV_PATH + srv + "/" + wf.CONF.HOST_FOLDER + wf.SERVERS[srv].HOSTS[host].name + "/" + wf.CONF.ZONE_FOLDER + wf.SERVERS[srv].HOSTS[host].ZONES[zone].name + '/' + wf.CONF.PAGE_FOLDER;
 	if(fs.existsSync(pDir) && fs.lstatSync(pDir).isDirectory())
 	{
 		wf.SERVERS[srv].HOSTS[host].ZONES[zone].PAGES = {};
@@ -35,7 +35,7 @@ function cbPages(srv, host, zone)
 		// Push Pages
 		pushPages(srv, host, zone, pDir, result);
 		// Sort pages
-		result.sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+		result.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
 		// Forge URI
 		for(var i = 0; i < result.length; i++)
 		{

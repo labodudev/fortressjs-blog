@@ -33,7 +33,7 @@ function MultipartParser(contentType, data)
 		this.isMultipart = contentType.indexOf('multipart/form-data') === 0;
 		parse.call(this, contentType, data);
 	}
-};
+}
 
 function parse(contentType, data)
 {
@@ -120,7 +120,7 @@ function parseHeader(header)
 	var headers = {};
     var headersArr = header.split(NL)
 			.map(function(v){return v.trim();})
-			.filter(function(v){return !!v;})
+			.filter(function(v){return !!v;});
 	headersArr.forEach(function(v){
 		var o = {};
         var t = v.split(HEADER_PAIR_DELIM, 2);

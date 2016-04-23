@@ -9,17 +9,15 @@ var wf = WF();
 
 function WorkerService()
 {
-
-
   this.startSrv = function()
   {
         wf.Srv.Run();
-    }
+  };
   
   this.stopSrv = function()
   {
       process.exit();
-  }
+  };
 
   this.loadAll = function()
   {
@@ -40,18 +38,18 @@ function WorkerService()
       wf.Srv.Run(); // RUN THE SERVER
       wf.eventEmitter.emit("run"); // LAUNCH RUN EVENT
 
-  }
+  };
 
   this.reloadAllSrv = function(obj)
   {
 	process.exit();
-  }
+  };
   
   this.deleteSrvClient = function(obj)
   {
      wf.Log("[!] deleting client " + obj.clientId + " from server " + obj.srvId);
      wf.Srv.deleteClient(obj.srvId, obj.clientId);
-  }
+  };
 
   this.addSrvClient = function(obj)
   {
@@ -60,7 +58,7 @@ function WorkerService()
     {
       wf.SERVERS[obj.srvId].CLIENTS[obj.client.id] = obj.client;
     }
-  }
+  };
   
   this.setRootVar = function(obj)
   {
@@ -69,7 +67,7 @@ function WorkerService()
       {
           wf[obj.varName] = obj.data;
       }
-  }
+  };
   
   this.setSrvVar = function(obj)
   {
@@ -77,7 +75,7 @@ function WorkerService()
       {
           wf.SERVERS[obj.srvId][obj.varName] = obj.data;
       }
-  }
+  };
   
   this.setHostVar = function(obj)
   {
@@ -86,6 +84,5 @@ function WorkerService()
           if(wf.SERVERS[obj.srvId] && wf.SERVERS[obj.srvId].HOSTS[obj.hostId])
             wf.SERVERS[obj.srvId].HOSTS[obj.hostId][obj.varName] = obj.data;
       }
-  }
-
+  };
 }

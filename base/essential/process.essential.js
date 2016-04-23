@@ -11,7 +11,7 @@ function LoadProcess()
 {
 	wf.PROCESS = {};
 	var sArr = [];
-	var c = wf.CONF['PROCESS_PATH'];
+	var c = wf.CONF.PROCESS_PATH;
 	if(fs.existsSync(c) && fs.lstatSync(c).isDirectory())
 	{
 		var dArr = fs.readdirSync(c);
@@ -20,13 +20,13 @@ function LoadProcess()
 			if (fs.lstatSync(c +'/' + dArr[d]).isDirectory() && dArr[d] != "." && dArr[d] != "..")
 			{
 				var proc = new wf.ProcessClass.Process(c, dArr[d]);
-				if(proc.processState && proc.conf.config['state'])
+				if(proc.processState && proc.conf.config.state)
 				{
 					sArr.push(proc);
 				}
 			}
-		};
-		sArr.sort(function(a, b){return a.conf.config['pos'] - b.conf.config['pos'];});
+		}
+		sArr.sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
 	}
 
 	wf.PROCESS = sArr;
@@ -44,7 +44,7 @@ function manageProcess(proc, wait)
 	{
 		setImmediate(function()
 		{
-			startProcess(proc)
+			startProcess(proc);
 		});
 	}
 	else
@@ -66,25 +66,26 @@ function startProcess(proc)
 		if(proc.restarted === undefined) proc.restarted = 0;
 
 		var level = getLog(proc.conf.config.log);
-		var logPath = wf.CONF['LOG_PATH'] + wf.CONF['PROCESS_FOLDER'] + NAME + "/" ;
+		var logPath = wf.CONF.LOG_PATH + wf.CONF.PROCESS_FOLDER + NAME + "/" ;
 
-		var logOut = logPath + NAME + wf.CONF['OUT_END'];
-		var logErr = logPath + NAME + wf.CONF['LOG_END'];
+		var logOut = logPath + NAME + wf.CONF.OUT_END;
+		var logErr = logPath + NAME + wf.CONF.LOG_END;
 
 		// TEST INIT IF EXISTS
 		if(proc.init !== undefined && typeof proc.init == 'function')
 		{
+			var mInit = "";
 			var init = proc.init();
 			if(!init.start)
 			{
-				var mInit = "[!] Init error in " + NAME + " - " + init.message;
+				mInit = "[!] Init error in " + NAME + " - " + init.message;
 				wf.Log(mInit);
 				wf.wLog(logErr, mInit + EOL);
 				return;
 			}
 			else
 			{
-				var mInit = "[!] Init message in " + NAME + " - " + init.message;
+				mInit = "[!] Init message in " + NAME + " - " + init.message;
 				wf.Log(mInit);
 				if(level > 0 && level < 3)
 					wf.wLog(logOut, mInit + EOL);
@@ -95,11 +96,9 @@ function startProcess(proc)
 
 		wf.PROCESS[NAME] =
 		{
-
 			init: proc,
 			handle: eProc,
-
-		}
+		};
 
 		var sProc = proc;
 
@@ -142,7 +141,7 @@ function startProcess(proc)
 			}
 			wf.Log(end);
 
-			if(sProc.conf.config.restart == 'auto' && (sProc.conf.config.attempt == 0 || sProc.restarted < sProc.conf.config.attempt) )
+			if(sProc.conf.config.restart == 'auto' && (sProc.conf.config.attempt === 0 || sProc.restarted < sProc.conf.config.attempt) )
 			{
 				var delay = sanitInt(sProc.conf.config.delay, 3000);
 				sProc.restarted = sProc.restarted + 1;
@@ -164,14 +163,14 @@ function startProcess(proc)
 function sanitInt(value, def)
 {
 	var res = value | 0;
-	if(res == 0) res = def;
+	if(res === 0) res = def;
 	return res;
 }
 
 function sanitBool(value, def)
 {
 	var res = value | false;
-	if(res == false) res = def;
+	if(res === false) res = def;
 	return res;
 }
 

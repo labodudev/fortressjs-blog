@@ -22,11 +22,10 @@ function MasterMessage()
         }
       }
      });
-  }
+  };
 
   this.reloadAllSrv = function()
   {
     this.sendAll({cmd:'reloadAllSrv'});
-  }
-
+  };
 }

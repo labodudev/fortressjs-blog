@@ -19,7 +19,7 @@ var rmdir = function(dir, cb2)
         {
             var i = 0;
             var j = list.length;
-            var cb = function(){ fs.rmdir(dir, function(err){if(cb2 && typeof cb2 == "function") cb2(err);})}
+            var cb = function(){ fs.rmdir(dir, function(err){if(cb2 && typeof cb2 == "function") cb2(err);});};
             recRm(dir, i, j, list, cb);
             return;
         }
@@ -41,9 +41,12 @@ var rmdir = function(dir, cb2)
                     cb();
             }
         }
-        try{
-        var filename = path.join(from, list[i]);
-        }catch(e)
+		var filename = "";
+        try
+		{
+			filename = path.join(from, list[i]);
+        }
+		catch(e)
         {
             nextFile();
             return;

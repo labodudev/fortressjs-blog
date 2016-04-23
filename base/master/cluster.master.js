@@ -20,37 +20,37 @@ function MasterCluster()
             wf.Cluster.createWorker( worker.srvId, worker.wrkId );
         }
 		delete wf.CLUSTERS[worker.id];
-	}
+	};
 	
     // ON CAPTE LA FERMETURE D'UN WORKER ET ON LE RELANCE
     cluster.on('exit', this.exitFunction);
 
 	this.createWorker = function(srvId, wrkId)
 	{
-		var c = cluster.fork( { srvId: srvId, wrkId: wrkId } );
-		wf.CLUSTERS[c.id] = c;
-		wf.CLUSTERS[c.id].srvId = srvId;
-        wf.CLUSTERS[c.id].wrkId = wrkId;
-		cluster.workers[c.id].on('message', function(msg)
+		var currentCluster = cluster.fork( { srvId: srvId, wrkId: wrkId } );
+		wf.CLUSTERS[currentCluster.id] = currentCluster;
+		wf.CLUSTERS[currentCluster.id].srvId = srvId;
+        wf.CLUSTERS[currentCluster.id].wrkId = wrkId;
+		cluster.workers[currentCluster.id].on('message', function(msg)
 		{
   			 if(msg.cmd !== undefined)
 			{
 			   wf.Event.DoCmd(msg);
 			}
 		});
-		return c;
-	}
+		return currentCluster;
+	};
 	
 	this.deleteClusters = function()
 	{
-		for(var c in wf.CLUSTERS)
+		for(var currentCluster in wf.CLUSTERS)
 		{
-			this.deleteCluster(wf.CLUSTERS[c].id);
+			this.deleteCluster(wf.CLUSTERS[currentCluster].id);
 		}
-	}
+	};
 	
 	this.deleteCluster = function(id)
 	{
 		delete wf.CLUSTERS[id];
-	}
+	};
 }

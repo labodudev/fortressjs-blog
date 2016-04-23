@@ -80,5 +80,5 @@ function PostHttp()
 				parseReqJSON(req);
             }
 		}
-	}
+	};
 }

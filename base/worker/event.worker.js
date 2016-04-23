@@ -5,24 +5,23 @@ http://seraum.com
 
 */
 module.exports.Event = new WorkerEvent();
-
 var wf = WF();
 
 function WorkerEvent()
 {
-  	process.on('message', function(msg)
+  	process.on('message', function(processMsg)
     {
-      if(msg.cmd !== undefined)
+      if(processMsg.cmd !== undefined)
       {
-         wf.Event.DoCmd(msg);
+         wf.Event.DoCmd(processMsg);
       }
-    }),
+    });
 
-    this.DoCmd = function(msg)
+    this.DoCmd = function(processMsg)
     {
-      if(wf.Service[msg.cmd] !== undefined)
+      if(wf.Service[processMsg.cmd] !== undefined)
       {
-        wf.Service[msg.cmd](msg);
+        wf.Service[processMsg.cmd](processMsg);
       }
-    }
+    };
 }

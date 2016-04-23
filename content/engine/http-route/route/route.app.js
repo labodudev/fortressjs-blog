@@ -26,5 +26,5 @@ function httpRouteEngine()
             req.continue = false;
             res.end();
         }
-    }
+    };
 }

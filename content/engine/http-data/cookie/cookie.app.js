@@ -23,5 +23,5 @@ function HttpCookie()
 				req.cookie[t[0]] = t[1];
 			}
 		}
-	}
+	};
 }

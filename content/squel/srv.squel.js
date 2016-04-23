@@ -9,5 +9,5 @@ var srvConf=
     {
       "http-default": {},
     } // { "http-data": {}, "http-route": {}}
-}
-module.exports.srvConf = srvConf;
+};
+module.exports = srvConf;

@@ -1,3 +1,4 @@
+'use strict';
 /*
 
 Copyright (C) 2016  Adrien THIERRY
@@ -13,7 +14,7 @@ module.exports.AppServer = {};
 
 UTILS.LoopExec = LoopExec;
 
-'use strict';
+
 var wf = WF();
 
 function Srv()
@@ -28,7 +29,7 @@ function Srv()
 		      Open(s);
 		}
 		securify();
-	}
+	};
 
   function DoRun()
   {
@@ -42,19 +43,19 @@ function Srv()
 
 var securify = function()
 {
-     if (wf.CONF['CHANGE_ID'] !== undefined && wf.CONF['CHANGE_ID'] == true && process.getuid && process.setuid)
+     if (wf.CONF.CHANGE_ID !== undefined && wf.CONF.CHANGE_ID == true && process.getuid && process.setuid)
     {
         try
         {
-                if(wf.CONF['GROUP_ID'] !== undefined)
-                    process.setgid(wf.CONF['GROUP_ID']);
-                if(wf.CONF['USER_ID'] !== undefined)
-                    process.setuid(wf.CONF['USER_ID']);
+                if(wf.CONF.GROUP_ID !== undefined)
+                    process.setgid(wf.CONF.GROUP_ID);
+                if(wf.CONF.USER_ID !== undefined)
+                    process.setuid(wf.CONF.USER_ID);
         }catch(e){
 
         }
     }
-}
+};
 var Open = function(srv)
 {
     if(wf.SERVERS[srv].state !== undefined && (wf.SERVERS[srv].state == 1 || wf.SERVERS[srv].state == true))
@@ -68,11 +69,10 @@ var Open = function(srv)
             wf.Log("Unknown server type");
         }
     }
-}
+};
 
   this.deleteAll = function()
   {
-
       for(var s in wf.SERVERS)
       {
         this.deleteSrv(s);
@@ -81,7 +81,6 @@ var Open = function(srv)
 
   this.deleteSrv = function(id)
   {
-
     if(wf.SERVERS[id] !== undefined)
     {
       for(var c in wf.SERVERS[id].CLIENTS)
@@ -95,7 +94,7 @@ var Open = function(srv)
       }
       delete wf.SERVERS[id];
     }
-  }
+  };
 
   this.deleteClient = function(srv, client)
   {
@@ -107,14 +106,13 @@ var Open = function(srv)
       }
       delete wf.SERVERS[srv].CLIENTS[client]
     }
-  }
-
+  };
 
 	function getSrvArray(p)
 	{
 		var sArr = [];
-		var end = wf.CONF['APP_END'];
-		var c = wf.CONF['APP_PATH'] + p;
+		var end = wf.CONF.APP_END;
+		var c = wf.CONF.APP_PATH + p;
 		if(fs.existsSync(c) && fs.lstatSync(c).isDirectory())
 		{
 			var dArr = fs.readdirSync(c);
@@ -123,7 +121,7 @@ var Open = function(srv)
 				if (fs.lstatSync(c +'/' + d).isDirectory() && d != "." && d != "..")
 				{
 					var app = new App(c, d);
-					if(app.appState && app.conf.config['state']) { aArr.push(app); }
+					if(app.appState && app.conf.config.state) { aArr.push(app); }
 				}
 			});
 		}
@@ -153,14 +151,14 @@ function LoadServer(id)
 	if(id !== undefined) full = false;
     if(!wf.SERVERS)
 	   wf.SERVERS = { };
-	var sDir = wf.CONF['SRV_PATH'];
+	var sDir = wf.CONF.SRV_PATH;
 	if(fs.existsSync(sDir) && fs.lstatSync(sDir).isDirectory())
 	{
 		var hArr = fs.readdirSync(sDir);
 		hArr.forEach(function(d)
 		{
 
-			var conf = d + wf.CONF['CONFIG_END'];
+			var conf = d + wf.CONF.CONFIG_END;
 			if ( fs.existsSync(sDir + d + '/' + conf) && fs.lstatSync(sDir + d + '/' + conf).isFile() && d != "." && d != ".." &&
 				( full || d == id) )
 			{

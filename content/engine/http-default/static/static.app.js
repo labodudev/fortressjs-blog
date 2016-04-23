@@ -8,6 +8,35 @@ module.exports = RouteStatic;
 function RouteStatic()
 {
     var wf = WF();
+	
+	function sendFile(req, res, url)
+	{
+		res.writeHead(200,
+		{
+			'Content-type': req.HOST.ZONES[req.zone].shared[url].mime,
+			'Content-length': req.HOST.ZONES[req.zone].shared[url].buffer.byteLength,
+			'Cache-Control': 'public, max-age=3600',
+			'Access-Control-Allow-Origin': req.url, // "*"
+			'X-Frame-Options': "SAMEORIGIN", // DENY, SAMEORIGIN, or ALLOW-FROM 
+		});
+		res.end(req.HOST.ZONES[req.zone].shared[url].buffer);
+	}
+	
+	function addToCache(req, stat, folder, url)
+	{
+		var toAdd = {};
+		toAdd.buffer = fs.readFileSync(folder);
+		cLength = toAdd.buffer.byteLength;
+		toAdd.mime = wf.mimeUtil.lookup(folder);
+		toAdd.path = folder;
+		toAdd.mtime = stat.mtime;
+		if(req.HOST.ZONES[req.zone].shared === undefined)
+		{
+			req.HOST.ZONES[req.zone].shared = {};
+		}
+		req.HOST.ZONES[req.zone].shared[url] = toAdd;
+	}
+	
     this.code = function(req, res)
     {
         var sUrl = "";
@@ -23,24 +52,15 @@ function RouteStatic()
             sUrl = req.url;
         }
 
-        if(req.HOST.ZONES[req.zone] && req.HOST.ZONES[req.zone].shared !== undefined 
-            && req.HOST.ZONES[req.zone].shared[sUrl] !== undefined)
+        if(req.HOST.ZONES[req.zone] && req.HOST.ZONES[req.zone].shared !== undefined && req.HOST.ZONES[req.zone].shared[sUrl] !== undefined)
         {
             req.continue = false;
-            res.writeHead(200,
-            {
-                'Content-type': req.HOST.ZONES[req.zone].shared[sUrl].mime,
-                'Content-length': req.HOST.ZONES[req.zone].shared[sUrl].buffer.byteLength,
-                'Cache-Control': 'public, max-age=3600',
-                'Access-Control-Allow-Origin': req.url, // "*"
-                'X-Frame-Options': "SAMEORIGIN", // DENY, SAMEORIGIN, or ALLOW-FROM 
-            });
-            res.end(req.HOST.ZONES[req.zone].shared[sUrl].buffer);
+            sendFile(req, res, sUrl);
         }
         else if(req.HOST.ZONES[req.zone].conf && req.HOST.ZONES[req.zone].conf.shared !== undefined )
         {
             var f = "";
-            if ( req.url.indexOf("/" + req.zone) == 0)
+            if ( req.url.indexOf("/" + req.zone) === 0)
             {
                 f = req.url.replace("/" + req.zone, '');
             }
@@ -57,18 +77,9 @@ function RouteStatic()
                 else if(stat.isFile())
                 {
 					var cLength = 0;
-                    if( req.HOST.ZONES[req.zone].conf.cache
-                       && UTILS.checkCache(req.HOST.ZONES[req.zone].conf.cache, f) )
+                    if( req.HOST.ZONES[req.zone].conf.cache && UTILS.checkCache(req.HOST.ZONES[req.zone].conf.cache, f) )
                     {
-                            var toAdd = {};
-                            toAdd.buffer = fs.readFileSync(f);
-							cLength = toAdd.buffer.byteLength;
-                            toAdd.mime = wf.mimeUtil.lookup(f);
-                            toAdd.path = f;
-                            toAdd.mtime = stat.mtime;
-                            if(req.HOST.ZONES[req.zone].shared === undefined)
-                                req.HOST.ZONES[req.zone].shared = {};
-                            req.HOST.ZONES[req.zone].shared[sUrl] = toAdd;
+                            addToCache(req, stat, f, sUrl)
                     }
 					else if(req.HOST.ZONES[req.zone].shared && req.HOST.ZONES[req.zone].shared[sUrl])
 					{
@@ -95,5 +106,5 @@ function RouteStatic()
             });
         }
         return;
-    }
+    };
 }

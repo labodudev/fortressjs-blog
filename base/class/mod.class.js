@@ -22,7 +22,7 @@ function Module(_path, _name)
 			this.mod = file;
 		}
 		else this.modState = false;
-	}
+	};
 
 	this.loadViews = function()
 	{
@@ -39,7 +39,7 @@ function Module(_path, _name)
 				}
 			}
 		}
-	}
+	};
 
 	this.checkModule();
 	this.conf = new ModConf(_path, _name);
@@ -66,7 +66,7 @@ function ModConf(_path, _name)
 				console.log("[!] Error Mod conf : " + file);
 			}
 		}
-	}
+	};
 
 	this.readConf();
 }

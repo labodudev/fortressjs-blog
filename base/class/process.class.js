@@ -4,7 +4,7 @@ Copyright (C) 2016  Adrien THIERRY
 http://seraum.com 
 
 */
-module.exports.ProcessClass = {Process: Process, ProcessConf: ProcessConf}
+module.exports.ProcessClass = {Process: Process, ProcessConf: ProcessConf};
 var wf = WF();
 
 function Process(_path, _name)
@@ -14,15 +14,15 @@ function Process(_path, _name)
 
 	this.checkProcess = function()
 	{
-		this.process = this.path + this.name + wf.CONF['PROCESS_END'];
-		var file = this.path + this.name + wf.CONF['CONFIG_END'];
+		this.process = this.path + this.name + wf.CONF.PROCESS_END;
+		var file = this.path + this.name + wf.CONF.CONFIG_END;
 		if(fs.existsSync(file))
 		{
 			this.processState = true;
 			this.conf = new ProcessConf(_path, _name);
 		}
 		else this.processState = false;
-	}
+	};
 	/* FONCTION DECLARATIONS */
 	this.checkProcess();
 	this.conf = new ProcessConf(_path, _name);
@@ -37,7 +37,7 @@ function ProcessConf(_path, _name)
 
 	this.readConf = function()
 	{
-		var file = this.path + this.name + wf.CONF['CONFIG_END'];
+		var file = this.path + this.name + wf.CONF.CONFIG_END;
 		if(fs.existsSync(file))
 		{
 			try
@@ -50,7 +50,7 @@ function ProcessConf(_path, _name)
 			  console.log("[!] Error process conf : " + file);
 			}
 		}
-	}
+	};
 	
 	/* FONCTION DECLARATIONS */
 	this.readConf();

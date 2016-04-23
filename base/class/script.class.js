@@ -23,8 +23,7 @@ function Script(_path, _name)
             this.conf = new ScriptConf(_path, _name);
         }
         else this.scriptState = false;
-    }
-
+    };
 
     /* FONCTION DECLARATIONS */
     this.checkScript();
@@ -52,7 +51,7 @@ function ScriptConf(_path, _name)
 			  console.log("[!] Error Script conf : " + file);
 			}
 		}
-	}
+	};
 
 	/* FONCTION DECLARATIONS */
 	this.readConf();

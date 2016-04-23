@@ -9,10 +9,8 @@ var wf = WF();
 
 function CLI()
 {
-
 	this.check = function()
 	{
 		
-	}
-
+	};
 }

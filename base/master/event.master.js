@@ -16,6 +16,5 @@ function MasterEvent()
     {
       wf.Service[msg.cmd](msg);
     }
-  }
-  
+  };
 }

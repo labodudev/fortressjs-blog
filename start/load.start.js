@@ -8,14 +8,14 @@ var nv = getNodeVersion();
 
 global.cluster = require('cluster');
 global.os = require('os');
-global.child_process = require('child_process')
+global.child_process = require('child_process');
 global.exec = child_process.exec;
 global.spawn = child_process.spawn;
 global.execFile = child_process.execFile;
 global.fs = require('fs');
 global.http = require('http');
 global.https = require('https');
-if( nv.major == 0 || (nv.major == 1 && nv.minor < 12) ){global.http.setMaxHeaderLength(10000000);} // SET HTTP MAXHEADER
+if( nv.major === 0 || (nv.major === 1 && nv.minor < 12) ){global.http.setMaxHeaderLength(10000000);} // SET HTTP MAXHEADER
 global.http.globalAgent.maxSockets = Infinity;
 global.path = require('path');
 global.net = require('net');
@@ -38,13 +38,13 @@ wf.Default = function(arg, def)
 {
 	if(arg === undefined) return def;
 	else return arg;
-}
+};
 UTILS.Default = wf.Default;
 
 wf.DefaultStr = function(arg)
 {
 	return wf.Default(arg, "");
-}
+};
 UTILS.DefaultStr = wf.DefaultStr;
 
 wf.Redirect = function(res, url)
@@ -55,13 +55,13 @@ wf.Redirect = function(res, url)
 		});
 	res.stop = true;
 	res.end("");
-}
+};
 UTILS.Redirect = wf.Redirect;
 
 wf.Clone = function(obj)
 {
   return Object.create(obj);
-}
+};
 UTILS.Clone = wf.Clone;
 
 UTILS.checkState = function(state)
@@ -86,16 +86,16 @@ UTILS.defaultConf = function(config, more)
 			if(!config[m]){config[m] = more[m];}
 		}
 	}
-}
+};
 
-wf.Load = new function(){
-
+wf.Load = new function()
+{
 	/* PUBLIC */
 	this.Base = function(path, cpath)
 	{
 		var bpath = "";
 		if(cpath === undefined)
-			bpath = wf.CONF['BASE_PATH'] + path + "/";
+			bpath = wf.CONF.BASE_PATH + path + "/";
 		else bpath = cpath + path + "/";
 		var files = this.loadFiles(path, bpath);
 		if(files !== undefined)
@@ -109,7 +109,7 @@ wf.Load = new function(){
 				}
 			});
 		}
-	}
+	};
 
 	this.loadFiles = function(path, bpath, complete)
 	{
@@ -131,12 +131,14 @@ wf.Load = new function(){
 					return fs.statSync(bpath + file).isFile();
 			});
 		}
-	}
+	};
     
     /* PRIVATE */
-	function getDirectories() {
-	  return fs.readdirSync(wf.CONF['BASE_PATH'] + path).filter(function (file) {
-		return fs.statSync(wf.CONF['BASE_PATH'] + path + '/' + file).isDirectory();
+	function getDirectories() 
+	{
+	  return fs.readdirSync(wf.CONF.BASE_PATH + path).filter(function (file) 
+	  {
+		return fs.statSync(wf.CONF.BASE_PATH + path + '/' + file).isDirectory();
 	  });
 	}
 };

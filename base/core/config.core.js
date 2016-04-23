@@ -5,7 +5,7 @@ http://seraum.com
 
 */
 module.exports.Config = Config;
-
+var wf = WF();
 function Config(path, name)
 {    
     this.path = path;
@@ -22,11 +22,10 @@ function Config(path, name)
             });
         }
         catch(e){}
-    }
+    };
     
     this.Save = function()
     {
-        fs.writeFile(this.path, JSON.stringify(this.value), 'binary', function(err){});
-    }
-    
+        fs.writeFile(this.path, JSON.stringify(this.value), 'binary', function(err){wf.Log(err)});
+    };
 }

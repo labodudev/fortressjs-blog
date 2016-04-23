@@ -15,7 +15,7 @@ function WorkerMessage()
   {
     //wf.Log("[W] sending command : " + msg.cmd);
     process.send(msg);
-  }
+  };
 
   this.restartWF = function()
   {
@@ -23,7 +23,7 @@ function WorkerMessage()
     {
         cmd: 'restartWF',
     });
-  }
+  };
   
   this.reloadAllSrv = function()
   {
@@ -31,7 +31,7 @@ function WorkerMessage()
     {
         cmd: 'reloadAllSrv',
     });
-  }
+  };
 
   this.reloadSrv = function(srv)
   {
@@ -40,17 +40,17 @@ function WorkerMessage()
         cmd: 'reloadSrv',
         srvId: srv,
       });
-  }
+  };
   
   this.haltMaster = function(action)
   {
-      this.sendMaster(
+      this.sendMaster
+	  (
       {
         cmd: 'haltSystem',
         action: action,
-      }
-    );
-  }
+      });
+  };
   
   this.rebootMaster = function(action)
   {
@@ -60,7 +60,7 @@ function WorkerMessage()
         action: action,
       }
     );
-  }
+  };
   
   this.addSrvClient = function(srvId, client)
   {
@@ -73,7 +73,7 @@ function WorkerMessage()
         from: cluster.worker.id,
       }
     );
-  }
+  };
 
   this.deleteSrvClient = function(srvId, clientId)
   {
@@ -86,7 +86,7 @@ function WorkerMessage()
         from: cluster.worker.id
       }
     );
-  }
+  };
   
   this.updateHostVar = function(srv, host, name, data)
   {
@@ -101,7 +101,7 @@ function WorkerMessage()
         from: cluster.worker.id,
         restrict: true,
     });
-  }
+  };
   
   this.updateSrvVar = function(srv, name, data)
   {
@@ -115,7 +115,7 @@ function WorkerMessage()
         from: cluster.worker.id,
         restrict: true,
     });
-  }
+  };
   
   this.updateRootVar = function(name, data)
   {
@@ -127,7 +127,7 @@ function WorkerMessage()
         data: data,
         from: cluster.worker.id,
     });
-  }
+  };
   
   this.createMaster = function(fn, param)
   {
@@ -137,7 +137,7 @@ function WorkerMessage()
         action: "create" + fn,
         param: param,
     });
-  }
+  };
   
   this.installMaster = function(tmp, param)
   {
@@ -151,7 +151,7 @@ function WorkerMessage()
             list: param,
         }
     });
-  }
+  };
   
   this.deleteMaster = function(param)
   {
@@ -161,7 +161,7 @@ function WorkerMessage()
         action: "delete",
         param: param
     });
-  }
+  };
   
   this.stopMaster = function(srvId)
   {
@@ -170,13 +170,13 @@ function WorkerMessage()
         cmd: "stopSrv",
         srvId: srvId
     });
-  }
+  };
   
   this.dumpMaster = function(obj)
   {
       obj.cmd = "dump";
     wf.Message.sendMaster(obj);
-  }
+  };
   
   this.execChrootedDaemonMaster = function(obj)
   {
@@ -185,6 +185,5 @@ function WorkerMessage()
             cmd: "execChrootedDaemon",
             action: obj,
         });
-  }
-  
+  };
 }

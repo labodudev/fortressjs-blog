@@ -146,7 +146,7 @@ function mapPushAppArray(srv, host, aMap, iMap, current)
 {
 	for(var i = 0; i < aMap[iMap[current]].length; i++)
 	{
-		if(aMap[iMap[current]][i].exec.runOnce && process.env.wrkId && process.env.wrkId == 0)
+		if(aMap[iMap[current]][i].exec.runOnce && process.env.wrkId && process.env.wrkId === 0)
 			aMap[iMap[current]][i].exec.runOnce();
 		wf.SERVERS[srv].HOSTS[host].appArray.push(aMap[iMap[current]][i]);
 	}

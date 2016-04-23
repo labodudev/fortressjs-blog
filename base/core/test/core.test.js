@@ -10,9 +10,6 @@ for(var exp in test)
 // TEST httpUtil.core.js
 require('../httputil.core.js');
 
-// TEST httpsUtil.core.js
-require('../httpsutil.core.js');
-
 // TEST log.core.js
 test = require('../log.core.js');
 test.Log('Log ok');

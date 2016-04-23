@@ -1,9 +1,9 @@
-module.exports.appCode = new appCode();
+module.exports = appCode;
 
-function appCode()
+function appCode(self)
 {
     // LAUNCHED WHEN SRV FIRED EVENT
-    this.code = function(req, res) {}
+    this.code = function(req, res) {};
     // LAUNCHED ONLY ON ONE THREAD AT START
-    this.runOnce = function(){}
+    this.runOnce = function(){};
 }

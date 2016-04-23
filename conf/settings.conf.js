@@ -47,6 +47,7 @@
 	wf.CONF['CONFIG_FOLDER'] = "config/";
     wf.CONF['APPCONFIG_END'] = ".json";
 
+	wf.CONF['DEFAULT_NET'] = "local";
 	wf.CONF['ZONE_FOLDER'] = "zone/";
 	wf.CONF['MOD_FOLDER'] = 'mod/';
 	wf.CONF['PAGE_FOLDER'] = 'page/';

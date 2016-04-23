@@ -32,7 +32,7 @@ function addMods(srv, host, zone, directory)
 	  if(mTmp.modState && mTmp.conf.config.state)
 	  {
 		var cTmp = require(directory + mTmp.name + "/" + mTmp.name + wf.CONF.MOD_END);
-		var eTmp = {}
+		var eTmp = {};
 		for( var c in cTmp)
 		{
 		  for(var f in cTmp[c])

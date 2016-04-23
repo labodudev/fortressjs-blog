@@ -14,7 +14,7 @@ function LoadHost()
     wf.SERVERS[srv].HOSTS = {};
     wf.SERVERS[srv].HOSTMAP = {};
     var tmpMap = [];
-    var hDir = wf.CONF['SRV_PATH'] + srv + "/" + wf.CONF['HOST_FOLDER'];
+    var hDir = wf.CONF.SRV_PATH + srv + "/" + wf.CONF.HOST_FOLDER;
 
     if(fs.existsSync(hDir) && fs.lstatSync(hDir).isDirectory())
     {
@@ -30,7 +30,7 @@ function LoadHost()
               'path': hDir,
               'host':hTmp.conf.config.host,
               'hostState': hTmp.hostState,
-              'state': hTmp.conf.config['state'],
+              'state': hTmp.conf.config.state,
               'name': hTmp.name,
               'app': hTmp.conf.config.app,
               'default_zone': hTmp.conf.config.default_zone,
@@ -47,9 +47,9 @@ function LoadHost()
       }
     }
       tmpMap.sort(function(a, b){return a.pos - b.pos;});
-      for(var i = 0; i < tmpMap.length; i++)
+      for(var n = 0; n < tmpMap.length; n++)
       {
-          wf.SERVERS[srv].HOSTMAP[tmpMap[i].host] = tmpMap[i].hostId;
+          wf.SERVERS[srv].HOSTMAP[tmpMap[n].host] = tmpMap[n].hostId;
       }
   }
 }

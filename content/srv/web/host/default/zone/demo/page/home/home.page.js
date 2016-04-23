@@ -4,8 +4,6 @@ function homePage()
 {
     this.code = function(req, res)
     {
-
-        res.end(this.view['home']);
-
-    }
+        res.end(this.view.home);
+    };
 }

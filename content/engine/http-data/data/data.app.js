@@ -9,6 +9,43 @@ var wf = WF();
 
 function dataEngine()
 {
+	function parseData(req, res)
+	{
+		try
+		{
+			var cl = parseInt(req.headers['content-length']);
+			if(cl > wf.CONF.MAX_POST_SIZE)
+			{
+				res.destroy();
+			}
+			else
+			{
+				 req.on("data", function(d)
+				{                         
+					try
+					{
+						req.postData += d.toString("binary");
+					}
+					catch(e){}
+					 
+					if(req.postData.length > wf.CONF.MAX_POST_SIZE)
+					{
+						res.destroy();
+					}
+				});
+
+				var root = this;
+				req.on("end", function()
+				{
+					next(req, res);
+				});
+			}
+		}
+		catch(e)
+		{
+			 res.destroy();
+		}
+	}
 
 	this.code = function(req, res)
 	{
@@ -30,40 +67,8 @@ function dataEngine()
         }
         else
         {
-            try
-            {
-                var cl = parseInt(req.headers['content-length']);
-                if(cl > wf.CONF['MAX_POST_SIZE'])
-                {
-                    res.destroy();
-                }
-                else
-                {
-                     req.on("data", function(d)
-                    {                         
-                        try
-                        {
-                            req.postData += d.toString("binary");
-                        }catch(e){}
-                         
-                        if(req.postData.length > wf.CONF['MAX_POST_SIZE'] )
-                        {
-                            res.destroy();
-                        }
-                    });
-
-                    var root = this;
-                    req.on("end", function()
-                    {
-                        next(req, res);
-                    });
-                }
-            }
-            catch(e)
-            {
-                 res.destroy();
-            }
-            req.continue = false;
+			req.continue = false;
+            parseData(req, res);
         }
-	}
+	};
 }

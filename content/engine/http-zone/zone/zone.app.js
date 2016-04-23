@@ -24,5 +24,5 @@ function Zone()
 		  req.zone = req.HOST.default_zone;
 		  req.zoneUri = "";
 		}
-	}
+	};
 }

@@ -35,19 +35,18 @@ function Zone(_path, _name)
 {
 		this.path = _path + _name + "/";
 		this.name = _name;
-		this.shared; {};
+		this.shared = {};
 
 
 	this.loadStatic = function()
 	{
-
         var name = "/" + this.name;
 
 		if(wf.CONF.SHARED_CACHE && this.conf.config.shared !== undefined)
 		{
 			var shared = this.path + this.conf.config.shared;
 			var cache = this.conf.config.cache;
-			function rDir(p, s)
+			var rDir = function(p, s)
 			{
 				s = wf.DefaultStr(s);
 				var tArr = { };

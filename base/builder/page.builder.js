@@ -13,7 +13,7 @@ function addPage(req, res)
 {
   if(!req.zone || !req.page) return;
   var page = req.HOST.ZONES[req.zone].PAGES[req.page];
-  var exec = UTILS.Clone(page.exec)
+  var exec = UTILS.Clone(page.exec);
   if(exec.code) exec.code(req, res);
 }
 
@@ -31,7 +31,7 @@ UTILS.Load = function(req, res, v)
     {
       res.tpl.inner += view[v];
     }
-}
+};
 UTILS.GetView = function(req, res, v)
 {
     var view = req.HOST.ZONES[req.zone].PAGES[req.page].view;
@@ -39,7 +39,7 @@ UTILS.GetView = function(req, res, v)
     {
       return view[v];
     }
-}
+};
 UTILS.End = function(req, res, v)
 {
     if(req.HOST.ZONES[req.zone].PAGES[req.page].view[v] !== undefined)
@@ -47,5 +47,5 @@ UTILS.End = function(req, res, v)
       res.end(req.HOST.ZONES[req.zone].PAGES[req.page].view[v]);
     }
     else res.end("Undefined view");
-}
+};
 /****************************************************************************/
