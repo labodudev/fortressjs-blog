@@ -78,7 +78,7 @@ UTILS.defaultConf = function(config, more)
 {
 	if(!config) config = {};
 	if(config.state === undefined) config.state = true;
-	if(!config.pos === undefined) config.pos = 100;
+	if(!config.pos) config.pos = 100;
 	if(more)
 	{
 		for(var m in more)
@@ -88,7 +88,8 @@ UTILS.defaultConf = function(config, more)
 	}
 };
 
-wf.Load = new function()
+wf.Load = new wfLoader();
+function wfLoader()
 {
 	/* PUBLIC */
 	this.Base = function(path, cpath)
@@ -152,6 +153,6 @@ function getNodeVersion()
 		major: v[0],
 		minor: v[1],
 		rev: v[2],
-	}
+	};
 	return res;
 }

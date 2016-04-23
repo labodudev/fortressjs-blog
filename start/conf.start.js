@@ -47,5 +47,5 @@ else
 
 function uncaughtExceptionCb (err)
 {
-	"uncaughtExceptions => " + wf.Log(err); 
+	wf.Log("uncaughtExceptions => " + err); 
 }

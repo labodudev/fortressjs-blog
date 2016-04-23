@@ -25,7 +25,8 @@ function cacheApp()
 				for(var folder in wf.SERVERS[srv].HOSTS[host].ZONES[zone].shared)
 				{
 					var tmp = wf.SERVERS[srv].HOSTS[host].ZONES[zone].shared[folder];
-					fs.stat( tmp.path, function(err, stat)
+					
+					var cbStat = function(err, stat)
 					{
 						if(err || !stat.isFile())
 						{
@@ -45,7 +46,9 @@ function cacheApp()
 							}
 							catch(e){}
 						}
-					});
+					};
+					
+					fs.stat(tmp.path, cbStat);
 				}
 			}
 		}

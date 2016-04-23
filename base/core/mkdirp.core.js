@@ -53,7 +53,7 @@ function mkdirP (p, opts, f, made) {
     
     xfs.mkdir(p, mode, function (err) 
 	{
-        mkdirPErr(err, opts, path, p, made, cb)
+        mkdirPErr(err, opts, path, p, made, cb);
     });
 }
 

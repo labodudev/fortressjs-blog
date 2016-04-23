@@ -168,7 +168,7 @@ function loadWithMap(srv, host, map)
           // LOAD HOOKS AT THE RIGHT PLACE
           mapAddHook(srv, host, acid, aMap, iMap);
 		  // Sort Map
-          aMap[iMap["app"]].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
+          aMap[iMap.app].sort(function(a, b){return a.conf.config.pos - b.conf.config.pos;});
         }
     }
     

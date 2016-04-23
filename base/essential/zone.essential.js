@@ -79,7 +79,7 @@ function Zone(_path, _name)
 					return tArr;
 				}
 				return tArr;
-			}
+			};
             try 
             {
 			     if(fs.statSync(shared).isDirectory())

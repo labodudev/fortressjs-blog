@@ -98,7 +98,7 @@ function Router()
          src: path.toString(),
          keys: keys,
          index: index
-      }
+      };
     };
 
     this.pathToRegExp = function (path, keys) 
@@ -131,10 +131,10 @@ function Router()
                 keys = route.keys,
                 splat = [],
                 param = {};
-
-            if (captures = uri.match(re)) 
+			captures = uri.match(re);
+            if (captures) 
             {
-                for (var j = 1, len = captures.length; j < len; ++j) 
+                for (var j = 1, len2 = captures.length; j < len2; ++j) 
                 {
                     var key = keys[j-1],
                         val = typeof captures[j] === 'string' ? unescape(captures[j]): captures[j];
@@ -156,4 +156,4 @@ function Router()
             }
         }
     };
-};
+}

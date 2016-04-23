@@ -1,9 +1,14 @@
 {
-	"ignore": [
+	"ignore": 
+	[
 		"**/jail/js-files/**",
 		"**/jail/assets/**",
 		"**.conf.js",
 		"**.test.js",
 		"**/run/**"
-  ]
+	],
+	"critics": 
+	{
+		"wc": { "limit": 5000 }
+	}
 }

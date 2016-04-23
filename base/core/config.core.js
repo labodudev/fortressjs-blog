@@ -26,6 +26,6 @@ function Config(path, name)
     
     this.Save = function()
     {
-        fs.writeFile(this.path, JSON.stringify(this.value), 'binary', function(err){wf.Log(err)});
+        fs.writeFile(this.path, JSON.stringify(this.value), 'binary', function(err){wf.Log(err);});
     };
 }

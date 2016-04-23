@@ -86,7 +86,7 @@ function httpUtil(httpHandler)
             data: data,
             version: version,
             date: new Date(Date.now()),
-        }
+        };
         res.end(JSON.stringify(result));
      };
      

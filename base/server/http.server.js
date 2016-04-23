@@ -49,8 +49,7 @@ function HttpServer(srv)
         }
         else
         {
-			// BLANK PAGE IF NOTHING WITH THIS HOST NAME EXISTS HERE
-			// TODO : CREATE A HOOK FOR EMPTY ENGINE
+			// BLANK PAGE IF NOTHING WITH THIS HOST NAME EXISTS HERE, CREATE A HOOK FOR EMPTY ENGINE
             res.end();
         }
     }

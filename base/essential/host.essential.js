@@ -22,7 +22,7 @@ function LoadHost()
 	  for(var d in hArr)
       {
         var hTmp = new wf.HostClass.Host(hDir, hArr[d]);
-        if(hTmp.hostState && hTmp.conf.config['state'])
+        if(hTmp.hostState && hTmp.conf.config.state)
         {
             wf.SERVERS[srv].HOSTS[hArr[d]] =
             {

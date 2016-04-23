@@ -79,7 +79,7 @@ function RouteStatic()
 					var cLength = 0;
                     if( req.HOST.ZONES[req.zone].conf.cache && UTILS.checkCache(req.HOST.ZONES[req.zone].conf.cache, f) )
                     {
-                            addToCache(req, stat, f, sUrl)
+                            addToCache(req, stat, f, sUrl);
                     }
 					else if(req.HOST.ZONES[req.zone].shared && req.HOST.ZONES[req.zone].shared[sUrl])
 					{

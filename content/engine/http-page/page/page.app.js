@@ -19,9 +19,9 @@ function createRoute(srv, host, zone, page, path)
 	}
 	else
 	{
-		for(var u in wf.SERVERS[srv].HOSTS[host].host)
+		for(var v in wf.SERVERS[srv].HOSTS[host].host)
 		{
-			wf.Router.ANY(u, path + page, wf.SERVERS[srv].HOSTS[host].ZONES[zone].PAGES[page].exec.code.bind(context));
+			wf.Router.ANY(v, path + page, wf.SERVERS[srv].HOSTS[host].ZONES[zone].PAGES[page].exec.code.bind(context));
 		}
 	}
 }
