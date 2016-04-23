@@ -40,8 +40,6 @@ function Srv()
 	  securify();
   }
 
-// TODO : METTRE CETTE FUNCTION DANS LES ENGINE
-
 var securify = function()
 {
      if (wf.CONF['CHANGE_ID'] !== undefined && wf.CONF['CHANGE_ID'] == true && process.getuid && process.setuid)

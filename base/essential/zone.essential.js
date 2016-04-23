@@ -35,7 +35,7 @@ function Zone(_path, _name)
 {
 		this.path = _path + _name + "/";
 		this.name = _name;
-		this.shared;
+		this.shared; {};
 
 
 	this.loadStatic = function()
@@ -43,7 +43,7 @@ function Zone(_path, _name)
 
         var name = "/" + this.name;
 
-		if(wf.CONF['SHARED_CACHE'] && this.conf.config.shared !== undefined)
+		if(wf.CONF.SHARED_CACHE && this.conf.config.shared !== undefined)
 		{
 			var shared = this.path + this.conf.config.shared;
 			var cache = this.conf.config.cache;
@@ -55,11 +55,11 @@ function Zone(_path, _name)
 				if(cache !== undefined && fs.statSync(p).isDirectory())
 				{
 					var pArr = fs.readdirSync(p);
-					pArr.forEach(function (d)
+					for(var d in pArr)
 					{
-						if(fs.statSync(p + '/' + d).isDirectory())
+						if(fs.statSync(p + '/' + pArr[d]).isDirectory())
 						{
-							tmpArr = rDir(p + '/' + d , s + "/" + d);
+							tmpArr = rDir(p + '/' + pArr[d] , s + "/" + pArr[d]);
 							for (var t in tmpArr)
 							{
 								tArr[t] = tmpArr[t];
@@ -67,16 +67,16 @@ function Zone(_path, _name)
 						}
 						else
 						{
-							if(checkCache(cache, name + s + "/" + d))
+							if(checkCache(cache, name + s + "/" + pArr[d]))
 							{
-								tArr[name + s + "/" + d] = { };
-								tArr[name + s + "/" + d].buffer = fs.readFileSync(p + "/" + d);
-								tArr[name + s + "/" + d].mime = wf.mimeUtil.lookup(d);
-								tArr[name + s + "/" + d].path = p + "/" + d;
-								tArr[name + s + "/" + d].mtime = fs.lstatSync( p + '/' + d).mtime;
+								tArr[name + s + "/" + pArr[d]] = { };
+								tArr[name + s + "/" + pArr[d]].buffer = fs.readFileSync(p + "/" + pArr[d]);
+								tArr[name + s + "/" + pArr[d]].mime = wf.mimeUtil.lookup(pArr[d]);
+								tArr[name + s + "/" + pArr[d]].path = p + "/" + pArr[d];
+								tArr[name + s + "/" + pArr[d]].mtime = fs.lstatSync( p + '/' + pArr[d]).mtime;
 							}
 						}
-					});
+					}
 					return tArr;
 				}
 				return tArr;
@@ -89,7 +89,7 @@ function Zone(_path, _name)
 			     }
             }catch(e){}
 		}
-	}
+	};
 
 	this.checkZone = function()
 	{
@@ -100,7 +100,7 @@ function Zone(_path, _name)
 			this.zone = folder;
 		}
 		else this.zoneState = false;
-	}
+	};
 
 	/* FONCTION DECLARATIONS */
 	this.checkZone();
@@ -118,7 +118,7 @@ function ZoneConf(_path, _name)
 
 	this.readConf = function()
 	{
-		var file = this.path + this.name + wf.CONF['CONFIG_END'];
+		var file = this.path + this.name + wf.CONF.CONFIG_END;
 		if(fs.existsSync(file))
 		{
 			try
@@ -128,39 +128,30 @@ function ZoneConf(_path, _name)
 			}
 			catch(e)
 			{
-			  console.log("[!] Error process conf : " + file);
+			  console.log("[!] Error Zone conf : " + file);
 			}
 		}
-	}
-	this.readCss = function()
-	{
-		var file = this.path + this.name + wf.CONF['CSS_END'];
-		if(fs.existsSync(file))
-		{
-			this.config['css'] = file;
-		}
-	}
+	};
 	this.checkState = function(state)
 	{
-		if(state == "true") this.config['state'] = true;
+		if(state == "true") this.config.state = true;
 		else this.config['state'] = false;
 	}
 
 	/* FONCTION DECLARATIONS */
 	this.readConf();
-	this.readCss();
 	/*************************/
 }
 
 function hookZoneCss(h, z, name)
 {
-	var path = wf.CONF['HOST_PATH'] + h + "/" + wf.CONF['ZONE_FOLDER'] + z + name;
+	var path = wf.CONF.HOST_PATH + h + "/" + wf.CONF.ZONE_FOLDER + z + name;
 	if (fs.existsSync(path) && fs.lstatSync(path).isDirectory())
 	{
 		var zone = new Zone(path, name);
-		if(zone.conf.config['css'].length > 0 && fs.existsSync(zone.conf.config['css']) && zone.zoneState && zone.conf.config['state'])
+		if(zone.conf.config.css.length > 0 && fs.existsSync(zone.conf.config.css) && zone.zoneState && zone.conf.config.state)
 		{
-			var zoneCss = require(zone.conf.config['css']);
+			var zoneCss = require(zone.conf.config.css);
 			for(var prop in zoneCss)
 			{
 				zoneCss[prop].path = zone.path + '/';
@@ -170,28 +161,25 @@ function hookZoneCss(h, z, name)
 	}
 }
 
+function cbZones(s, h)
+{
+	var zDir = wf.CONF.SRV_PATH + s + "/" + wf.CONF.HOST_FOLDER + wf.SERVERS[s].HOSTS[h].name + '/' + wf.CONF.ZONE_FOLDER;
+	if(fs.existsSync(zDir) && fs.lstatSync(zDir).isDirectory())
+	{
+		wf.SERVERS[s].HOSTS[h].ZONES = { };
+		var hArr = fs.readdirSync(zDir);
+		for(var d in hArr)
+		{
+			var zTmp = new Zone(zDir, hArr[d]);
+			if(zTmp.zoneState && zTmp.conf.config['state'])
+			{
+			wf.SERVERS[s].HOSTS[h].ZONES[zTmp.conf.config.uri] = {'path': zDir, 'name': zTmp.name, 'conf': zTmp.conf.config, "shared": zTmp.shared };
+			}
+		}
+	}
+}
+
 function LoadZones()
 {
-
-  for(var s in wf.SERVERS)
-  {
-
-    for(var h in wf.SERVERS[s].HOSTS)
-    {
-      var zDir = wf.CONF['SRV_PATH'] + s + "/" + wf.CONF['HOST_FOLDER'] + wf.SERVERS[s].HOSTS[h].name + '/' + wf.CONF['ZONE_FOLDER'];
-      if(fs.existsSync(zDir) && fs.lstatSync(zDir).isDirectory())
-      {
-        wf.SERVERS[s].HOSTS[h].ZONES = { };
-        var hArr = fs.readdirSync(zDir);
-        hArr.forEach(function(d)
-        {
-          var zTmp = new Zone(zDir, d);
-          if(zTmp.zoneState && zTmp.conf.config['state'])
-          {
-            wf.SERVERS[s].HOSTS[h].ZONES[zTmp.conf.config.uri] = {'path': zDir, 'name': zTmp.name, 'conf': zTmp.conf.config, "shared": zTmp.shared };
-          }
-        });
-      }
-    }
-  }
+	wf.parseServersAndHosts(cbZones);
 }

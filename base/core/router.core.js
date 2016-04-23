@@ -22,8 +22,6 @@ UTILS.Router = ROUTER;
     regexp : /lang/:lang([a-z]{2}) will match "/lang/en" but not "/lang/12" or "/lang/eng"
     /^\/(\d{2,3}-\d{2,3}-\d{4})\.(\w*)$/ (note no quotes, this is a RegExp, not a string.) will match "/123-22-1234.json". Each match group will be an entry in splat: ["123-22-1234", "json"]
     
-    TODO : ADD MULTIPLE ROUTER ?
-    
  */
 
 function Router()
