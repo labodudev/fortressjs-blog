@@ -20,6 +20,7 @@ function LoadProcess()
 		{
 			if (fs.lstatSync(c +'/' + dArr[d]).isDirectory() && dArr[d] != "." && dArr[d] != "..")
 			{
+				
 				var proc = new wf.ProcessClass.Process(c, dArr[d]);
 				if(proc.processState && proc.conf.config.state)
 				{
@@ -73,23 +74,24 @@ function startProcess(proc)
 		var logErr = logPath + NAME + wf.CONF.LOG_END;
 
 		// TEST INIT IF EXISTS
-		if(proc.init !== undefined && typeof proc.init == 'function')
+		if(proc.process !== undefined)
 		{
-			var mInit = "";
-			var init = proc.init();
-			if(!init.start)
+			var PROC = require(proc.process);
+			if(typeof PROC == "function")
 			{
-				mInit = "[!] Init error in " + NAME + " - " + init.message;
-				wf.Log(mInit);
-				wf.wLog(logErr, mInit + EOL);
-				return;
-			}
-			else
-			{
-				mInit = "[!] Init message in " + NAME + " - " + init.message;
-				wf.Log(mInit);
-				if(level > 0 && level < 3)
-					wf.wLog(logOut, mInit + EOL);
+				PROC = new PROC(proc);
+				if(PROC.code && typeof PROC.code == "function")
+				{
+					if(PROC.message)
+					{
+						if(level > 0 && level < 3)
+						{
+							mInit = "[!] Init message in " + NAME + " - " + init.message;
+							wf.wLog(logOut, mInit + EOL);
+						}
+					}
+					PROC.code();
+				}
 			}
 		}
 

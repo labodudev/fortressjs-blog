@@ -14,7 +14,11 @@ function Process(_path, _name)
 
 	this.checkProcess = function()
 	{
-		this.process = this.path + this.name + wf.CONF.PROCESS_END;
+		var pFile = this.path + this.name + wf.CONF.PROCESS_END;
+		if(fs.existsSync(pFile))
+		{
+			this.process = pFile;
+		}
 		var file = this.path + this.name + wf.CONF.CONFIG_END;
 		if(fs.existsSync(file))
 		{
@@ -33,7 +37,7 @@ function ProcessConf(_path, _name)
 {
 	this.path = _path + _name + "/";
 	this.name = _name;
-	this.config = { "state": true, "pos": 100, restart: 'none', 'attempt': 5, 'delay': 3000, 'started': 10000, 'wait': false, cmd:'', args: [], options: {} };
+	this.defaultConf = { "state": true, "pos": 100, restart: 'none', 'attempt': 5, 'delay': 3000, 'started': 10000, 'wait': false, cmd:'', args: [], options: {} };
 
 	this.readConf = function()
 	{
