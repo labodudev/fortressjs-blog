@@ -35,7 +35,6 @@ function cbHooks(s,h)
 
 function parseHook(root, current, hookArr)
 {
-	console.log(root + current);
 	if (fs.lstatSync(root +'/' + current).isDirectory() && current != "." && current != "..")
 	{
 		var app = new wf.AppClass.App(root, current);
