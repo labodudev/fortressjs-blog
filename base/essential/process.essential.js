@@ -121,16 +121,24 @@ function startProcess(proc)
 			{
 				wf.wLog(logOut, data);
 			}
-			//wf.Log('stdout: ' + data);
+
+			if(proc.conf.config.onOut && typeof proc.conf.config.onOut == "function")
+			{
+				proc.conf.config.onOut(data);
+			}
 		});
 		// ON STDERR
 		eProc.stderr.on('data', function (data)
 		{
 			if(level > 0)
 			{
-				wf.wLog(logErr, data + os.EOL);
+				wf.wLog(logErr, "stderr: " + data + os.EOL);
 			}
 			wf.Error('stderr: ' + data + os.EOL);
+			if(proc.conf.config.onError && typeof proc.conf.config.onError == "function")
+			{
+				proc.conf.config.onError(data);
+			}
 		});
 		// ON CLOSE
 		eProc.on('close', function (code)
@@ -141,8 +149,11 @@ function startProcess(proc)
 			{
 				wf.wLog(logErr, end);
 			}
-			wf.Log(end);
 
+			if(proc.conf.config.onClose && typeof proc.conf.config.onClose == "function")
+			{
+				proc.conf.config.onClose();
+			}
 			if(sProc.conf.config.restart == 'auto' && (sProc.conf.config.attempt === 0 || sProc.restarted < sProc.conf.config.attempt) )
 			{
 				var delay = sanitInt(sProc.conf.config.delay, 3000);
