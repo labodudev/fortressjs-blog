@@ -23,7 +23,7 @@ function cbHooks(s,h)
 		var current = fs.readdirSync(root);
 		for(var c in current)
 		{
-			parseHook(root, current[c]);
+			parseHook(root, current[c], hookArr);
 		}
 		for(var o in hookArr)
 		{
@@ -33,17 +33,20 @@ function cbHooks(s,h)
 	}
 }
 
-function parseHook(root, current)
+function parseHook(root, current, hookArr)
 {
+	console.log(root + current);
 	if (fs.lstatSync(root +'/' + current).isDirectory() && current != "." && current != "..")
 	{
 		var app = new wf.AppClass.App(root, current);
 		if(app.appState && app.conf.config.state && app.conf.config.hook !== undefined)
 		{
+			var tmpDir = root +'/' + current;
 			var newModule = {};
 			try
 			{
-				var loadedModule = require(tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END);
+				
+				var loadedModule = require(tmpDir + "/" + app.name + wf.CONF.APP_END);
 				if(loadedModule && typeof loadedModule == "function")
 				{
 					newModule = new loadedModule(app);
@@ -58,7 +61,7 @@ function parseHook(root, current)
 					};
 				}
 			}
-			catch(e){ console.log("Error in Hooks : " +  tmpDir + confModule.name + "/" + confModule.name + wf.CONF.APP_END); }
+			catch(e){ console.log(e); console.log("Error in Hook conf : " +  tmpDir + app.name + "/" + app.name + wf.CONF.APP_END); }
 			if(hookArr[app.conf.config.hook] === undefined) hookArr[app.conf.config.hook] = [];
 			hookArr[app.conf.config.hook].push({'name': app.name, 'hooked': true, 'conf': app.conf, 'exec': newModule, 'view': app.view });
 		}
