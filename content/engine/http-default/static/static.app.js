@@ -26,7 +26,7 @@ function RouteStatic()
 	{
 		var toAdd = {};
 		toAdd.buffer = fs.readFileSync(folder);
-		cLength = toAdd.buffer.byteLength;
+		var cLength = toAdd.buffer.byteLength;
 		toAdd.mime = wf.mimeUtil.lookup(folder);
 		toAdd.path = folder;
 		toAdd.mtime = stat.mtime;
