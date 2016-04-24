@@ -20,7 +20,6 @@ function LoadProcess()
 		{
 			if (fs.lstatSync(c +'/' + dArr[d]).isDirectory() && dArr[d] != "." && dArr[d] != "..")
 			{
-				
 				var proc = new wf.ProcessClass.Process(c, dArr[d]);
 				if(proc.processState && proc.conf.config.state)
 				{
