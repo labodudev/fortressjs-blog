@@ -23,12 +23,12 @@ function article(post)
       "default": "publish"
     },
     "date": {
-      "type": "number",
-      "default": Date.now()
+      "type": "string",
+      "default": new Date().toDateString(),
     },
     "date_modified": {
-      "type": "number",
-      "default": Date.now()
+      "type": "string",
+      "default": new Date().toDateString(),
     }
   };
 

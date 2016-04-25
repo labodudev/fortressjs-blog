@@ -5,8 +5,6 @@ http://labodudev.fr
 
 */
 
-var url = require('url');
-
 var ROUTER = UTILS.Router;
 
 var articleModel = require('./model/article.model.js' );
