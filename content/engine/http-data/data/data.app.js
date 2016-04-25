@@ -1,7 +1,7 @@
 /*
 
 Copyright (C) 2016  Adrien THIERRY
-http://seraum.com 
+http://seraum.com
 
 */
 module.exports = dataEngine;
@@ -21,13 +21,13 @@ function dataEngine()
 			else
 			{
 				req.on("data", function(d)
-				{                         
+				{
 					try
 					{
 						req.postData += d.toString("binary");
 					}
 					catch(e){}
-					 
+
 					if(req.postData.length > wf.CONF.MAX_POST_SIZE)
 					{
 						res.destroy();
@@ -46,7 +46,7 @@ function dataEngine()
 			 res.destroy();
 		}
 	}
-	
+
 	this.code = function(req, res)
 	{
 		var cbDestroy = function()
@@ -56,8 +56,8 @@ function dataEngine()
         req.postData = "";
         req.on("error", cbDestroy);
         req.on("clientError",  cbDestroy);
-        
-        if(req.method != "POST" && req.method != "PUT") 
+
+        if(req.method != "POST" && req.method != "PUT" && req.method != "DELETE")
         {
             return;
         }

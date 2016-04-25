@@ -11,7 +11,7 @@ var hostConf=
 
     "app":
     {
-		"log": "Logger app"
-    },
+			"log": "Logger app",
+    }
 }
 module.exports = hostConf

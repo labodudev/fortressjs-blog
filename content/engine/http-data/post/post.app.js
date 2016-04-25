@@ -1,7 +1,7 @@
 /*
 
 Copyright (C) 2016  Adrien THIERRY
-http://seraum.com 
+http://seraum.com
 
 */
 module.exports = PostHttp;
@@ -9,7 +9,7 @@ module.exports = PostHttp;
 function PostHttp()
 {
     var wf = WF();
-	
+
 	function parseMultipartReq(req, multipart)
 	{
 		for(var r in multipart.parts)
@@ -19,7 +19,7 @@ function PostHttp()
 		req.field = multipart.fields;
 		req.multipart = multipart.isMultipart;
 	}
-	
+
 	function parseReqRaw(req)
 	{
 		var tmp = req.postData.toString();
@@ -31,7 +31,7 @@ function PostHttp()
 			req.post[t[0]] = unescape(t[1].replace(/\+/gi, " "));
 		}
 	}
-	
+
 	function parseReqPost(req)
 	{
 		var multipart = new wf.MultipartParser(req.headers['content-type'], req.postData);
@@ -52,7 +52,7 @@ function PostHttp()
 			parseReqRaw(req);
 		}
 	}
-	
+
 	function parseReqJSON(req)
 	{
 		for(var p in req.post)
@@ -67,11 +67,11 @@ function PostHttp()
 			}
 		}
 	}
-	
+
 	this.code = function(req, res)
 	{
         req.post = {};
-        if(req.method == "POST" || req.method == "PUT") 
+        if(req.method == "POST" || req.method == "PUT" || req.method == "DELETE") 
         {
             if(req.postData !== undefined)
             {
