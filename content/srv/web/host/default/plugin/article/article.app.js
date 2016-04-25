@@ -115,6 +115,6 @@ function article()
 		fs.writeFile(__dirname + "/data/article.json", JSON.stringify(data), function(err) {
 			if (err) res.end(err);
 		});
-	}
+	};
 }
 module.exports = article;

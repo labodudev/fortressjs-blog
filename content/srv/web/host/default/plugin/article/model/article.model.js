@@ -43,7 +43,7 @@ function article(post)
     }
 
     return undefined;
-  }
+  };
 
   this.validate = function(data) {
     for (var key in this.structureToValidate) {
@@ -53,7 +53,7 @@ function article(post)
       }
 
       // Check type
-      if (!UTILS.dataUtil.isEmpty(post[key]) && typeof post[key] != this.structureToValidate[key].type && this.structureToValidate[key].default == undefined) {
+      if (!UTILS.dataUtil.isEmpty(post[key]) && typeof post[key] != this.structureToValidate[key].type && this.structureToValidate[key].default === undefined) {
         return false;
       }
 
@@ -75,7 +75,7 @@ function article(post)
     }
 
     return true;
-  }
+  };
 
   /** Before use it, use, validate method */
   this.toObject = function() {
@@ -83,5 +83,5 @@ function article(post)
       return false;
 
     return this.obj;
-  }
+  };
 }

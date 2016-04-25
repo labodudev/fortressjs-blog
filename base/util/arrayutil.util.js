@@ -2,7 +2,7 @@
 var arrayUtil = {};
 
 var findIndexByField = function(i, a, f) {
-	if (f == undefined && !i)
+	if (f === undefined && !i)
 		return false;
 	
 	for (var key in a) {
@@ -12,7 +12,7 @@ var findIndexByField = function(i, a, f) {
 	}
 	
 	return false;
-}
+};
 
 arrayUtil.findIndexByField = findIndexByField;
 module.exports.arrayUtil = arrayUtil;

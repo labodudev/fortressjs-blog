@@ -3,7 +3,7 @@ var dataUtil = {};
 
 var isEmpty = function(d) {
 
-    if (d == null) return true;
+    if (d === null) return true;
 
     if (d.length > 0)    return false;
     if (d.length === 0)  return true;
@@ -13,7 +13,7 @@ var isEmpty = function(d) {
     }
 
     return true;
-}
+};
 
 var sanitizeTitle = function (str)
 {
@@ -34,13 +34,13 @@ var sanitizeTitle = function (str)
 		.replace(/-+/g, '-'); // collapse dashes
 
 	return str;
-}
+};
 
 var uniqueField = function(str, obj, field, number) {
 	if (isEmpty(obj))
 		return str + "-0";
 	
-	if(number == undefined)
+	if(number === undefined)
 		number = 0;
 	
 	for (var key in obj) {
@@ -52,7 +52,7 @@ var uniqueField = function(str, obj, field, number) {
 	}
 	
 	return number;
-}
+};
 
 dataUtil.isEmpty = isEmpty;
 dataUtil.sanitizeTitle = sanitizeTitle;
