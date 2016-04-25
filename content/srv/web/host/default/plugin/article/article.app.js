@@ -94,6 +94,7 @@ function article()
 	this.getDataArticle = function(res, callback) {
 		try {
 			fs.readFile( __dirname + "/data/" + "article.json", 'utf8', function (err, data) {
+				if (err) res.end(err);
 				try {
 					data = JSON.parse(data);
 				}
