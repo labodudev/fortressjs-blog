@@ -12,7 +12,6 @@ function article(post)
     },
     "slug": {
       "type": "string",
-      "primary": true,
       "unique": true,
       "default": {
         "function": UTILS.dataUtil.sanitizeTitle,
@@ -31,19 +30,9 @@ function article(post)
       "type": "number",
       "default": Date.now()
     }
-
   };
 
   this.obj = {};
-
-  this.getPrimaryField = function() {
-    for (var key in this.structureToValidate) {
-      if (this.structureToValidate[key].primary)
-        return key;
-    }
-
-    return undefined;
-  };
 
   this.validate = function(data) {
     for (var key in this.structureToValidate) {

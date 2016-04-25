@@ -14,106 +14,126 @@ var articleModel = require('./model/article.model.js' );
 function article()
 {
 	var self = this;
+	this.version = "1";
+	this.baseRoute = "/api/v" + this.version + "/";
+
 	this.code = function(req, res)
 	{
-		ROUTER.addRoute('127.0.0.1', 'GET', '/restapi/article', function(req, res) {
+		ROUTER.addRoute('127.0.0.1', 'GET', self.baseRoute + 'articles', function(req, res) {
+			res.setHeader('Content-Type', 'application/json');
 			self.getDataArticle(res, function(data) {
+				res.statusCode = 200;
 				res.end(JSON.stringify(data));
 			});
 		});
 
-		ROUTER.addRoute('127.0.0.1', 'PUT', '/restapi/article', function(req, res) {
+		ROUTER.addRoute('127.0.0.1', 'PUT', self.baseRoute + 'articles', function(req, res) {
+			res.setHeader('Content-Type', 'application/json');
 			self.getDataArticle(res, function(data) {
 				try {
 					var articleToAdd = new articleModel(req.post);
-					if(articleToAdd.validate(data)) {
+					if (articleToAdd.validate(data)) {
 						data.push(articleToAdd.toObject());
 
-						self.writeDataArticle(data, function() {
-							res.end('Put');
+						self.writeDataArticle(res, data, function() {
+							res.statusCode = 200;
+							res.end(JSON.stringify(articleToAdd.toObject()));
 						});
 					}
 					else {
-						res.end('Invalid data');
+						res.statusCode = 422;
+						res.end(JSON.stringify({"error":"Invalid field"}));
 					}
 				}
 				catch (e) {
-					res.end('Invalid JSON');
+					res.statusCode = 422;
+					res.end(JSON.stringify({"error":"Invalid field"}));
 				}
 			});
 		});
 
-		ROUTER.addRoute('127.0.0.1', 'POST', '/restapi/article', function(req, res) {
+		ROUTER.addRoute('127.0.0.1', 'POST', self.baseRoute + 'articles', function(req, res) {
+			res.setHeader('Content-Type', 'application/json');
 			self.getDataArticle(res, function(data) {
 				try {
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
-						var articleToAdd = new articleModel(req.post.set);
-						if(articleToAdd.validate(data)) {
-							data[index] = articleToAdd.toObject();
-							self.writeDataArticle(data, function() {
-								res.end('Edit');
+						var articleToEdit = new articleModel(req.post.set);
+						if(articleToEdit.validate(data)) {
+							data[index] = articleToEdit.toObject();
+							self.writeDataArticle(res, data, function() {
+								res.statusCode = 200;
+								res.end(JSON.stringify(articleToEdit.toObject()));
 							});
-
 						}
 						else {
-							res.end('Invalid data');
+							res.statusCode = 422;
+							res.end(JSON.stringify({"error":"Invalid field"}));
 						}
 					}
 					else {
-						res.end('Not found');
+						res.statusCode = 422;
+						res.end(JSON.stringify({"error":"Invalid field"}));
 					}
 				}
 				catch (e) {
-					res.end('Invalid JSON');
+					res.statusCode = 422;
+					res.end(JSON.stringify({"error":"Invalid field"}));
 				}
 			});
 		});
 
-		ROUTER.addRoute('127.0.0.1', 'DELETE', '/restapi/article', function(req, res) {
+		ROUTER.addRoute('127.0.0.1', 'DELETE', self.baseRoute + 'articles', function(req, res) {
+			res.setHeader('Content-Type', 'application/json');
 			self.getDataArticle(res, function(data) {
 				try {
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
+						var slug = req.post.where.slug;
 						data.splice(index, 1);
-						self.writeDataArticle(data, function() {
-							res.end('Delete');
+						self.writeDataArticle(res, data, function() {
+							res.statusCode = 200;
+							res.end(JSON.stringify({"slug": slug}));
 						});
 					}
 					else {
-						res.end('Not found');
+						res.statusCode = 422;
+						res.end(JSON.stringify({"error":"Invalid field"}));
 					}
 				}
 				catch (e) {
-					res.end('Invalid JSON');
+					res.statusCode = 422;
+					res.end(JSON.stringify({"error":"Invalid field"}));
 				}
 			});
 		});
 	};
 
 	this.getDataArticle = function(res, callback) {
-		try {
-			fs.readFile( __dirname + "/data/" + "article.json", 'utf8', function (err, data) {
-				if (err) res.end(err);
-				try {
-					data = JSON.parse(data);
-				}
-				catch (e) {
-					data = [];
-				}
+		fs.readFile( __dirname + "/data/" + "articles.json", 'utf8', function (err, data) {
+			if (err) {
+				res.statusCode = 500;
+				res.end(JSON.stringify({"error": "Internal Server Error"}));
+			}
 
-				res.setHeader('Content-Type', 'application/json');
-				callback(data);
-			});
-		}
-		catch (e) {
-			res.end('Invalid file');
-		}
+			try {
+				data = JSON.parse(data);
+			}
+			catch (e) {
+				data = [];
+			}
+			callback(data);
+		});
 	};
 
-	this.writeDataArticle = function(data) {
-		fs.writeFile(__dirname + "/data/article.json", JSON.stringify(data), function(err) {
-			if (err) res.end(err);
+	this.writeDataArticle = function(res, data, callback) {
+		fs.writeFile(__dirname + "/data/articles.json", JSON.stringify(data), function(err) {
+			if (err) {
+				res.statusCode = 500;
+				res.end(JSON.stringify({"error": "Internal Server Error"}));
+			}
+
+			callback();
 		});
 	};
 }

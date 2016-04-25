@@ -3,7 +3,7 @@ var dataUtil = {};
 
 var isEmpty = function(d) {
 
-    if (d === null) return true;
+    if (d == null) return true;
 
     if (d.length > 0)    return false;
     if (d.length === 0)  return true;
@@ -40,7 +40,7 @@ var uniqueField = function(str, obj, field, number) {
 	if (isEmpty(obj))
 		return str + "-0";
 	
-	if(number === undefined)
+	if(number == undefined)
 		number = 0;
 	
 	for (var key in obj) {
