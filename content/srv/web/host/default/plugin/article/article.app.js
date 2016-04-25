@@ -29,10 +29,8 @@ function article()
 					if(articleToAdd.validate(data)) {
 						data.push(articleToAdd.toObject());
 
-						fs.writeFile(__dirname + "/data/article.json", JSON.stringify(data), function(err) {
-							if (err) res.end(err);
-
-							res.end(JSON.stringify(data));
+						self.writeDataArticle(data, function() {
+							res.end('Put');
 						});
 					}
 					else {
@@ -53,11 +51,10 @@ function article()
 						var articleToAdd = new articleModel(req.post.set);
 						if(articleToAdd.validate(data)) {
 							data[index] = articleToAdd.toObject();
-							fs.writeFile(__dirname + "/data/article.json", JSON.stringify(data), function(err) {
-								if (err) res.end(err);
-
-								res.end(JSON.stringify(data));
+							self.writeDataArticle(data, function() {
+								res.end('Edit');
 							});
+
 						}
 						else {
 							res.end('Invalid data');
@@ -79,11 +76,8 @@ function article()
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
 						data.splice(index, 1);
-
-						fs.writeFile(__dirname + "/data/article.json", JSON.stringify(data), function(err) {
-							if (err) res.end(err);
-
-							res.end(JSON.stringify(data));
+						self.writeDataArticle(data, function() {
+							res.end('Delete');
 						});
 					}
 					else {
@@ -114,6 +108,12 @@ function article()
 		catch (e) {
 			res.end('Invalid file');
 		}
+	};
+
+	this.writeDataArticle = function(data) {
+		fs.writeFile(__dirname + "/data/article.json", JSON.stringify(data), function(err) {
+			if (err) res.end(err);
+		});
 	}
 }
 module.exports = article;
