@@ -1,7 +1,7 @@
 /*
 
 Copyright (C) 2016  Jimmy LATOUR
-http://labodudev.fr 
+http://labodudev.fr
 
 */
 
@@ -13,26 +13,17 @@ var articleModel = require('./model/article.model.js' );
 
 function article()
 {
+	var self = this;
 	this.code = function(req, res)
 	{
 		ROUTER.addRoute('127.0.0.1', 'GET', '/restapi/article', function(req, res) {
-			res.setHeader('Content-Type', 'application/json');
-			fs.readFile(__dirname + "/data/" + "article.json", 'utf8', function (err, data) {
-	  		res.end(data);
-	   	});
+			self.getDataArticle(res, function(data) {
+				res.end(JSON.stringify(data));
+			});
 		});
 
 		ROUTER.addRoute('127.0.0.1', 'PUT', '/restapi/article', function(req, res) {
-			res.setHeader('Content-Type', 'application/json');
-
-   		fs.readFile( __dirname + "/data/" + "article.json", 'utf8', function (err, data) {
-				try {
-					data = JSON.parse(data);
-				}
-				catch (ex) {
-					data = [];
-				}
-
+			self.getDataArticle(res, function(data) {
 				try {
 					var articleToAdd = new articleModel(req.post);
 					if(articleToAdd.validate(data)) {
@@ -55,16 +46,7 @@ function article()
 		});
 
 		ROUTER.addRoute('127.0.0.1', 'POST', '/restapi/article', function(req, res) {
-			res.setHeader('Content-Type', 'application/json');
-
-   		fs.readFile( __dirname + "/data/" + "article.json", 'utf8', function (err, data) {
-				try {
-					data = JSON.parse(data);
-				}
-				catch (ex) {
-					data = [];
-				}
-
+			self.getDataArticle(res, function(data) {
 				try {
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
@@ -92,16 +74,7 @@ function article()
 		});
 
 		ROUTER.addRoute('127.0.0.1', 'DELETE', '/restapi/article', function(req, res) {
-			res.setHeader('Content-Type', 'application/json');
-
-   		fs.readFile( __dirname + "/data/" + "article.json", 'utf8', function (err, data) {
-				try {
-					data = JSON.parse(data);
-				}
-				catch (ex) {
-					data = [];
-				}
-
+			self.getDataArticle(res, function(data) {
 				try {
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
@@ -123,5 +96,24 @@ function article()
 			});
 		});
 	};
+
+	this.getDataArticle = function(res, callback) {
+		try {
+			fs.readFile( __dirname + "/data/" + "article.json", 'utf8', function (err, data) {
+				try {
+					data = JSON.parse(data);
+				}
+				catch (e) {
+					data = [];
+				}
+
+				res.setHeader('Content-Type', 'application/json');
+				callback(data);
+			});
+		}
+		catch (e) {
+			res.end('Invalid file');
+		}
+	}
 }
 module.exports = article;
