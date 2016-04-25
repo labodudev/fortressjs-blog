@@ -1,3 +1,10 @@
+/*
+
+Copyright (C) 2016  Jimmy LATOUR
+http://labodudev.fr 
+
+*/
+
 var url = require('url');
 
 var ROUTER = UTILS.Router;
