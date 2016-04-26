@@ -13,7 +13,7 @@ var webConf=
       "http-page": {at: "start"},
 	    "http-default": { at: "default"},
       "http-route": {at: "route"},
-      // "http-error": {at: "error"}
+      "http-error": {at: "error"}
     },
     "map": ["start", "app", "default", "route", "error" ] // Order app/engine launching map
 }

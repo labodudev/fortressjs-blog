@@ -7,9 +7,22 @@ http://labodudev.fr
 
 var ROUTER = UTILS.Router;
 
-var articleModel = require('./model/article.model.js' );
+var models = [];
 
-function article()
+/** Read all model files */
+fs.readdir(__dirname + "/model/", function(err, files) {
+	if (err) console.log(err);
+
+	if (files) {
+		for(var key in files) {
+			var tmp = require(__dirname + "/model/" + files[key]);
+			var index = files[key].split('.');
+			models[index[0] + "s"] = tmp;
+		}
+	}
+});
+
+function api()
 {
 	var self = this;
 	this.version = "1";
@@ -17,25 +30,25 @@ function article()
 
 	this.code = function(req, res)
 	{
-		ROUTER.addRoute('127.0.0.1', 'GET', self.baseRoute + 'articles', function(req, res) {
+		ROUTER.addRoute('*', 'GET', self.baseRoute + '*', function(req, res) {
 			res.setHeader('Content-Type', 'application/json');
-			self.getDataArticle(res, function(data) {
+			self.getData(res, req.splat[1], function(data) {
 				res.statusCode = 200;
 				res.end(JSON.stringify(data));
 			});
 		});
 
-		ROUTER.addRoute('127.0.0.1', 'PUT', self.baseRoute + 'articles', function(req, res) {
+		ROUTER.addRoute('*', 'PUT', self.baseRoute + '*', function(req, res) {
 			res.setHeader('Content-Type', 'application/json');
-			self.getDataArticle(res, function(data) {
+			self.getData(res, req.splat[1], function(data) {
 				try {
-					var articleToAdd = new articleModel(req.post);
-					if (articleToAdd.validate(data)) {
-						data.push(articleToAdd.toObject());
+					var objectToAdd = new models[req.splat[1]](req.post);
+					if (objectToAdd.validate(data)) {
+						data.push(objectToAdd.toObject());
 
-						self.writeDataArticle(res, data, function() {
+						self.writeData(res, req.splat[1], data, function() {
 							res.statusCode = 200;
-							res.end(JSON.stringify(articleToAdd.toObject()));
+							res.end(JSON.stringify(objectToAdd.toObject()));
 						});
 					}
 					else {
@@ -50,18 +63,18 @@ function article()
 			});
 		});
 
-		ROUTER.addRoute('127.0.0.1', 'POST', self.baseRoute + 'articles', function(req, res) {
+		ROUTER.addRoute('*', 'POST', self.baseRoute + '*', function(req, res) {
 			res.setHeader('Content-Type', 'application/json');
-			self.getDataArticle(res, function(data) {
+			self.getData(res, req.splat[1], function(data) {
 				try {
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
-						var articleToEdit = new articleModel(req.post.set);
-						if(articleToEdit.validate(data)) {
-							data[index] = articleToEdit.toObject();
-							self.writeDataArticle(res, data, function() {
+						var objectToEdit = new models[req.splat[1]](req.post.set);
+						if(objectToEdit.validate(data)) {
+							data[index] = objectToEdit.toObject();
+							self.writeData(res, req.splat[1], data, function() {
 								res.statusCode = 200;
-								res.end(JSON.stringify(articleToEdit.toObject()));
+								res.end(JSON.stringify(objectToEdit.toObject()));
 							});
 						}
 						else {
@@ -81,15 +94,15 @@ function article()
 			});
 		});
 
-		ROUTER.addRoute('127.0.0.1', 'DELETE', self.baseRoute + 'articles', function(req, res) {
+		ROUTER.addRoute('*', 'DELETE', self.baseRoute + '*', function(req, res) {
 			res.setHeader('Content-Type', 'application/json');
-			self.getDataArticle(res, function(data) {
+			self.getData(res, req.splat[1], function(data) {
 				try {
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
 						var slug = req.post.where.slug;
 						data.splice(index, 1);
-						self.writeDataArticle(res, data, function() {
+						self.writeData(res, req.splat[1], data, function() {
 							res.statusCode = 200;
 							res.end(JSON.stringify({"slug": slug}));
 						});
@@ -107,8 +120,8 @@ function article()
 		});
 	};
 
-	this.getDataArticle = function(res, callback) {
-		fs.readFile( __dirname + "/data/" + "articles.json", 'utf8', function (err, data) {
+	this.getData = function(res, file, callback) {
+		fs.readFile( __dirname + "/data/" + file + ".json", 'utf8', function (err, data) {
 			if (err) {
 				res.statusCode = 500;
 				res.end(JSON.stringify({"error": "Internal Server Error"}));
@@ -120,12 +133,13 @@ function article()
 			catch (e) {
 				data = [];
 			}
+			
 			callback(data);
 		});
 	};
 
-	this.writeDataArticle = function(res, data, callback) {
-		fs.writeFile(__dirname + "/data/articles.json", JSON.stringify(data), function(err) {
+	this.writeData = function(res, file, data, callback) {
+		fs.writeFile(__dirname + "/data/" + file + ".json", JSON.stringify(data), function(err) {
 			if (err) {
 				res.statusCode = 500;
 				res.end(JSON.stringify({"error": "Internal Server Error"}));
@@ -135,4 +149,4 @@ function article()
 		});
 	};
 }
-module.exports = article;
+module.exports = api;

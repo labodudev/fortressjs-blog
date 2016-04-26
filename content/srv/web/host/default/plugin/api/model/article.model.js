@@ -2,6 +2,8 @@ module.exports = article;
 
 function article(post)
 {
+  this.route = "articles";
+
   this.structureToValidate = {
     "name": {
       "type": "string",
