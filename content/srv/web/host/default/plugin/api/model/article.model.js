@@ -2,9 +2,9 @@ var object = require('./object.model.js');
 
 module.exports = article;
 
-function article(post)
+function article(method, post)
 {
-  object.call(this, post);
+  object.call(this, method, post);
 
   this.structureToValidate = {
     "name": {

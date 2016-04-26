@@ -23,6 +23,9 @@
     "simple",
     "speed"
   ],
+  "dependencies": {
+	"bcrypt-nodejs": "0.0.3"
+  },
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (http://seraum.com)",
   "license": "MIT",
   "licenses": [

@@ -38,9 +38,10 @@ function api()
 				var dataModel = [];
 				// Vérifie les données
 				for(var key in data) {
-					var objectToView = new models[req.splat[1]](data[key]);
-					objectToView.validate('GET', data);
-					dataModel.push(objectToView.toObject());
+					var params = UTILS.dataUtil.isEmpty(req.post) ? req.get : req.post;
+					var objectToView = new models[req.splat[1]]('GET', data[key]);
+					if (objectToView.validate(data, params))
+						dataModel.push(objectToView.toObject());
 				}
 
 				res.statusCode = 200;
@@ -52,8 +53,8 @@ function api()
 			res.setHeader('Content-Type', 'application/json');
 			self.getData(res, req.splat[1], function(data) {
 				try {
-					var objectToAdd = new models[req.splat[1]](req.post);
-					if (objectToAdd.validate('PUT', data)) {
+					var objectToAdd = new models[req.splat[1]]('PUT', req.post);
+					if (objectToAdd.validate(data, {})) {
 						data.push(objectToAdd.toObject());
 
 						self.writeData(res, req.splat[1], data, function() {
@@ -79,8 +80,8 @@ function api()
 				try {
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
-						var objectToEdit = new models[req.splat[1]](req.post.set);
-						if(objectToEdit.validate('POST', data)) {
+						var objectToEdit = new models[req.splat[1]]('POST', req.post.set);
+						if(objectToEdit.validate(data, {})) {
 							data[index] = objectToEdit.toObject();
 							self.writeData(res, req.splat[1], data, function() {
 								res.statusCode = 200;
