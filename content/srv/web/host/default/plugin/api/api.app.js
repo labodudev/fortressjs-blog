@@ -14,10 +14,12 @@ fs.readdir(__dirname + "/model/", function(err, files) {
 	if (err) console.log(err);
 
 	if (files) {
-		for(var key in files) {
-			var tmp = require(__dirname + "/model/" + files[key]);
-			var index = files[key].split('.');
-			models[index[0] + "s"] = tmp;
+		for (var key in files) {
+			if (files[key] != "object.model.js") {
+				var tmp = require(__dirname + "/model/" + files[key]);
+				var index = files[key].split('.');
+				models[index[0] + "s"] = tmp;
+			}
 		}
 	}
 });
@@ -33,8 +35,16 @@ function api()
 		ROUTER.addRoute('*', 'GET', self.baseRoute + '*', function(req, res) {
 			res.setHeader('Content-Type', 'application/json');
 			self.getData(res, req.splat[1], function(data) {
+				var dataModel = [];
+				// Vérifie les données
+				for(var key in data) {
+					var objectToView = new models[req.splat[1]](data[key]);
+					objectToView.validate('GET', data);
+					dataModel.push(objectToView.toObject());
+				}
+
 				res.statusCode = 200;
-				res.end(JSON.stringify(data));
+				res.end(JSON.stringify(dataModel));
 			});
 		});
 
@@ -43,7 +53,7 @@ function api()
 			self.getData(res, req.splat[1], function(data) {
 				try {
 					var objectToAdd = new models[req.splat[1]](req.post);
-					if (objectToAdd.validate(data)) {
+					if (objectToAdd.validate('PUT', data)) {
 						data.push(objectToAdd.toObject());
 
 						self.writeData(res, req.splat[1], data, function() {
@@ -70,7 +80,7 @@ function api()
 					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
 					if (index >= 0) {
 						var objectToEdit = new models[req.splat[1]](req.post.set);
-						if(objectToEdit.validate(data)) {
+						if(objectToEdit.validate('POST', data)) {
 							data[index] = objectToEdit.toObject();
 							self.writeData(res, req.splat[1], data, function() {
 								res.statusCode = 200;
@@ -133,7 +143,7 @@ function api()
 			catch (e) {
 				data = [];
 			}
-			
+
 			callback(data);
 		});
 	};

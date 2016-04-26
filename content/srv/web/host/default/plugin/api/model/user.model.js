@@ -1,30 +1,20 @@
 var object = require('./object.model.js');
 
-module.exports = article;
+module.exports = user;
 
-function article(post)
+function user(post)
 {
   object.call(this, post);
 
   this.structureToValidate = {
-    "name": {
+    "pseudo": {
       "type": "string",
       "required": true
     },
-    "content": {
+    "password": {
       "type": "string",
-    },
-    "slug": {
-      "type": "string",
-      "unique": true,
-      "default": {
-        "function": UTILS.dataUtil.sanitizeTitle,
-        "field": "name"
-      }
-    },
-    "status": {
-      "type": "string",
-      "default": "publish"
+      "show": false,
+      "required": true,
     },
     "date": {
       "type": "string",
