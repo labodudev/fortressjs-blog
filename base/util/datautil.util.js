@@ -38,13 +38,18 @@ var sanitizeTitle = function (str)
 
 var uniqueField = function(str, obj, field, number) {
 	if (isEmpty(obj))
-		return str + "-0";
+		return str;
 	
 	if(number == undefined)
 		number = 0;
 	
 	for (var key in obj) {
-		if (obj[key][field] == str + "-" + number) {
+		if (obj[key][field] == str && number == 0) {
+			number++;
+			number = uniqueField(str, obj, field, number);
+			break;
+		}
+		else if (obj[key][field] == (str + "-" + number)) {
 			number++;
 			number = uniqueField(str, obj, field, number);
 			break;

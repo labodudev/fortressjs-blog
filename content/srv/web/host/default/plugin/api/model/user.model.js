@@ -23,7 +23,7 @@ function user(method, post)
     "password": {
       "type": "string",
       "show": false,
-      "required": true,
+      "required": false,
       "function": {
         "PUT": hachPassword,
         "GET": comparePassword,

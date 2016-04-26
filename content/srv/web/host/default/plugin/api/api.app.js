@@ -36,9 +36,9 @@ function api()
 			res.setHeader('Content-Type', 'application/json');
 			self.getData(res, req.splat[1], function(data) {
 				var dataModel = [];
+				var params = UTILS.dataUtil.isEmpty(req.post) ? req.get : req.post;
 				// Vérifie les données
 				for(var key in data) {
-					var params = UTILS.dataUtil.isEmpty(req.post) ? req.get : req.post;
 					var objectToView = new models[req.splat[1]]('GET', data[key]);
 					if (objectToView.validate(data, params))
 						dataModel.push(objectToView.toObject());
@@ -53,7 +53,8 @@ function api()
 			res.setHeader('Content-Type', 'application/json');
 			self.getData(res, req.splat[1], function(data) {
 				try {
-					var objectToAdd = new models[req.splat[1]]('PUT', req.post);
+					var params = UTILS.dataUtil.isEmpty(req.post) ? req.get : req.post;
+					var objectToAdd = new models[req.splat[1]]('PUT', params);
 					if (objectToAdd.validate(data, {})) {
 						data.push(objectToAdd.toObject());
 
@@ -78,24 +79,18 @@ function api()
 			res.setHeader('Content-Type', 'application/json');
 			self.getData(res, req.splat[1], function(data) {
 				try {
-					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
-					if (index >= 0) {
-						var objectToEdit = new models[req.splat[1]]('POST', req.post.set);
-						if(objectToEdit.validate(data, {})) {
-							data[index] = objectToEdit.toObject();
-							self.writeData(res, req.splat[1], data, function() {
-								res.statusCode = 200;
-								res.end(JSON.stringify(objectToEdit.toObject()));
-							});
+					var params = UTILS.dataUtil.isEmpty(req.post) ? req.get : req.post;
+					for(var key in data) {
+						var objectToEdit = new models[req.splat[1]]('GET', params.set);
+
+						if(objectToEdit.validate(data, params)) {
+							data[key] = objectToEdit.toObject();
 						}
-						else {
-							res.statusCode = 422;
-							res.end(JSON.stringify({"error":"Invalid field"}));
-						}
-					}
-					else {
-						res.statusCode = 422;
-						res.end(JSON.stringify({"error":"Invalid field"}));
+
+						self.writeData(res, req.splat[1], data, function() {
+							res.statusCode = 200;
+							res.end(JSON.stringify(objectToEdit.toObject()));
+						});
 					}
 				}
 				catch (e) {
@@ -109,18 +104,17 @@ function api()
 			res.setHeader('Content-Type', 'application/json');
 			self.getData(res, req.splat[1], function(data) {
 				try {
-					var index = UTILS.arrayUtil.findIndexByField(req.post.where.slug, data, 'slug');
-					if (index >= 0) {
-						var slug = req.post.where.slug;
-						data.splice(index, 1);
+					var params = UTILS.dataUtil.isEmpty(req.post) ? req.get : req.post;
+					for(var key in data) {
+						var objectToEdit = new models[req.splat[1]]('GET', data[key]);
+						if(objectToEdit.validate(data, params)) {
+							data.splice(key, 1);
+						}
+
 						self.writeData(res, req.splat[1], data, function() {
 							res.statusCode = 200;
-							res.end(JSON.stringify({"slug": slug}));
+							res.end(JSON.stringify(objectToEdit.toObject()));
 						});
-					}
-					else {
-						res.statusCode = 422;
-						res.end(JSON.stringify({"error":"Invalid field"}));
 					}
 				}
 				catch (e) {

@@ -3,7 +3,7 @@ module.exports = object;
 function object(method, post) {
   this.obj = {};
 
-  this.validate = function(data, params) {
+  this.validate = function(data, where) {
     for (var key in this.structureToValidate) {
       // If is required
       if (this.structureToValidate[key].required && UTILS.dataUtil.isEmpty(post[key])) {
@@ -27,14 +27,15 @@ function object(method, post) {
       }
 
       // Unique field
-      if (this.structureToValidate[key].unique && !UTILS.dataUtil.isEmpty(data)) {
-          this.obj[key] = this.obj[key] + "-" + UTILS.dataUtil.uniqueField(this.obj[key], data, key, 0);
+      if (this.structureToValidate[key].unique && !UTILS.dataUtil.isEmpty(data) && method != "GET") {
+        var number = UTILS.dataUtil.uniqueField(this.obj[key], data, key, 0);
+        if (number > 0)
+          this.obj[key] = this.obj[key] + "-" + number;
       }
 
       // Function method
-      if (this.obj[key] && this.structureToValidate[key].function && this.structureToValidate[key].function[method] && params[key]) {
-        var tmp = this.structureToValidate[key].function[method](params[key], this.obj[key]);
-
+      if (this.obj[key] && this.structureToValidate[key].function && this.structureToValidate[key].function[method] && post && post[key] && method != "GET") {
+        var tmp = this.structureToValidate[key].function[method](post[key], this.obj[key]);
         if (typeof tmp == "boolean" && !tmp) {
           return false;
         }
@@ -44,10 +45,26 @@ function object(method, post) {
       }
     }
 
-    if (params) {
-      for (var key in params) {
-        if (this.obj[key] && this.obj[key] != params[key] && this.obj[key] != true)
-          return false;
+    if (where) {
+      for (var key in where) {
+        if (this.obj[key] && this.obj[key] && where[key]) {
+            // Check function ?
+            if(this.structureToValidate[key].function && this.structureToValidate[key].function["GET"]) {
+              var tmp = this.structureToValidate[key].function["GET"](where[key], this.obj[key]);
+
+              if (typeof tmp == "boolean" && !tmp) {
+                return false;
+              }
+              else {
+                this.obj[key] = tmp;
+              }
+            }
+            else {
+              // Check value ?
+              if (where[key] != this.obj[key])
+                return false;
+            }
+        }
       }
     }
 
