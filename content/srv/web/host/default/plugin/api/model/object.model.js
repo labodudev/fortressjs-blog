@@ -61,6 +61,10 @@ function object(method, post) {
             }
             else {
               // Check value ?
+              if(key == 'slug') {
+                console.log(where[key]);
+                console.log(this.obj[key]);
+              }
               if (where[key] != this.obj[key])
                 return false;
             }

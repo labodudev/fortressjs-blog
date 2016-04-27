@@ -82,16 +82,15 @@ function api()
 					var params = UTILS.dataUtil.isEmpty(req.post) ? req.get : req.post;
 					for(var key in data) {
 						var objectToEdit = new models[req.splat[1]]('GET', params.set);
-
-						if(objectToEdit.validate(data, params)) {
+						if(objectToEdit.validate(data, params.where)) {
 							data[key] = objectToEdit.toObject();
 						}
-
-						self.writeData(res, req.splat[1], data, function() {
-							res.statusCode = 200;
-							res.end(JSON.stringify(objectToEdit.toObject()));
-						});
 					}
+
+					self.writeData(res, req.splat[1], data, function() {
+						res.statusCode = 200;
+						res.end(JSON.stringify(objectToEdit.toObject()));
+					});
 				}
 				catch (e) {
 					res.statusCode = 422;
